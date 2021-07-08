@@ -37,26 +37,11 @@ main()
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
 
-    /* write shaders */
-    std::string vertexShader = R"glsl(
-        #version 300 es
-        layout(location = 0) in vec4 pos;
-        
-        void
-        main() {
-            gl_Position = pos;
-        };
-        )glsl";
+    /* shaders */
+    std::string vertexShader = readShader("shaders/basicVertex.shader");
+    std::string fragmentShader = readShader("shaders/basicFragment.shader");
 
-    std::string fragmentShader = R"glsl(
-        #version 300 es
-        layout(location = 0) out mediump vec4 color;
-        
-        void
-        main() {
-            color = vec4(1.0, 0.0, 0.0, 1.0);
-        };
-        )glsl";
+    // TODO: check for errors reading shader files
 
     unsigned int shader = generateShader(vertexShader, fragmentShader);
     glUseProgram(shader);
