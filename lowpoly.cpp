@@ -44,16 +44,12 @@ main()
     };
 
     /* vertex array object */
-    unsigned int vao_id;
-    glCall(glGenVertexArrays(1, &vao_id));
-    glCall(glBindVertexArray(vao_id));
-
-    /* vertex buffers */
+    VertexArrayObject vao;
     VertexBuffer vb(triangle_pos, 8, GL_STATIC_DRAW);
     vb.bind();
 
-    glCall(glEnableVertexAttribArray(0));
-    glCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0));
+    vao.addAttribute<float>(2);
+    vao.bindToVertexBuffer(vb);
 
     /* index buffers */
     IndexBuffer ib(indicies, 6, GL_STATIC_DRAW);
@@ -87,7 +83,7 @@ main()
         glCall(glUseProgram(shader));
         glCall(glUniform4f(u_Color_loc, 1.0f, 1.0f, 0.0f, 1.0f));
 
-        glCall(glBindVertexArray(vao_id));
+        vao.bind();
         glCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
         glfwSwapBuffers(win);

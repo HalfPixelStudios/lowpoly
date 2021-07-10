@@ -5,14 +5,60 @@
 #include "headers/glutils.h"
 #include "headers/renderobjects.h"
 
-VertexArrayObject::VertexArrayObject()
+VertexArrayObject::VertexArrayObject(void)
+{
+    glCall(glGenVertexArrays(1, &renderer_id));
+}
+
+VertexArrayObject::~VertexArrayObject(void)
 {
 }
 
-VertexArrayObject::~VertexArrayObject()
+template<> void
+VertexArrayObject::addAttribute<unsigned int>(int count)
 {
+    layout.push_back({ GL_UNSIGNED_INT, count, GL_FALSE });
+    stride += count * sizeof(GLuint);
 }
 
+template<> void
+VertexArrayObject::addAttribute<float>(int count)
+{
+    layout.push_back({ GL_FLOAT, count, GL_FALSE });
+    stride += count * sizeof(GLfloat);
+}
+
+void
+VertexArrayObject::bindToVertexBuffer(VertexBuffer& vb)
+{
+    this->bind();
+    vb.bind();
+
+    unsigned int offset = 0;
+    for (unsigned int i = 0; i < layout.size(); i++) {
+
+        glCall(glEnableVertexAttribArray(i));
+        glCall(glVertexAttribPointer(
+            i, layout[i].count, layout[i].type, layout[i].normalized,
+            stride, (const void*)offset
+        ));
+
+        offset += layout[i].count * glSizeOfType(layout[i].type);
+    }
+            
+}
+
+void
+VertexArrayObject::bind(void)
+{
+    glCall(glBindVertexArray(renderer_id));
+}
+
+void
+VertexArrayObject::unbind(void)
+{
+    glCall(glBindVertexArray(0));
+}
 
 /* vertex buffer */
 

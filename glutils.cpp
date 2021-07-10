@@ -1,8 +1,20 @@
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-
 #include <cstdio>
+
+#include "headers/glutils.h"
+
+unsigned int
+glSizeOfType(GLenum type)
+{
+    switch (type) {
+        case GL_FLOAT: return 4;
+        case GL_UNSIGNED_INT: return 4;
+    }
+    ASSERT(false);
+    return 0;
+}
 
 void
 glPurgeErrors(void)

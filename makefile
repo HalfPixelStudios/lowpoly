@@ -1,6 +1,6 @@
 
 CC=g++
-CFLAGS=-Wall
+CFLAGS=-Wall -Wno-int-to-pointer-cast
 LIBS=-lglfw -lGL -lGLEW
 # LIBS=-lglfw -lGL -lX11 -lGLEW -lpthread -lXrandr -lXi -ldl
 
