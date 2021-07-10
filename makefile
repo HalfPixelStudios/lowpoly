@@ -4,7 +4,7 @@ CFLAGS=-Wall
 LIBS=-lglfw -lGL -lGLEW
 # LIBS=-lglfw -lGL -lX11 -lGLEW -lpthread -lXrandr -lXi -ldl
 
-SRC=shaderutils
+SRC=shaderutils glutils
 OBJ=$(addsuffix .cpp,${SRC})
 
 .PHONY: clean

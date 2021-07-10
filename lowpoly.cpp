@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "headers/shaderutils.h"
+#include "headers/glutils.h"
 
 int
 main()
@@ -25,17 +26,29 @@ main()
     /* make a buffer */
     float triangle_pos[] = {
         -0.5f, -0.5f,
-         0.0f,  0.5f,
          0.5f, -0.5f,
+         0.5f,  0.5f,
+        -0.5f,  0.5f
+    };
+    unsigned int indicies[] = {
+        0, 1, 2,
+        2, 3, 0
     };
 
-    unsigned int buffer;
-    glGenBuffers(1, &buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, buffer);
-    glBufferData(GL_ARRAY_BUFFER, 6*sizeof(float), triangle_pos, GL_STATIC_DRAW);
+    /* vertex buffers */
+    unsigned int vbuf_id;
+    glGenBuffers(1, &vbuf_id);
+    glBindBuffer(GL_ARRAY_BUFFER, vbuf_id);
+    glBufferData(GL_ARRAY_BUFFER, 8*sizeof(float), triangle_pos, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
+
+    /* index buffers */
+    unsigned int ibuf_id;
+    glGenBuffers(1, &ibuf_id);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuf_id);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(unsigned int), indicies, GL_STATIC_DRAW);
 
     /* shaders */
     std::string vertexShader = readShader("shaders/basicVertex.shader");
@@ -51,7 +64,7 @@ main()
 
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
 
         glfwSwapBuffers(win);
         glfwPollEvents();
