@@ -4,6 +4,7 @@
 
 #include "headers/shaderutils.h"
 #include "headers/glutils.h"
+#include "headers/renderobjects.h"
 
 int
 main()
@@ -15,6 +16,10 @@ main()
         return 1;
     }
 
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     win = glfwCreateWindow(400, 400, "LowPoly", NULL, NULL);
     glfwMakeContextCurrent(win);
 
@@ -22,6 +27,9 @@ main()
         std::cerr << "Failed to initialize glew" << std::endl;
         return 1;
     }
+
+    /* opengl config */
+    glCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
 
     /* make a buffer */
     float triangle_pos[] = {
@@ -35,20 +43,21 @@ main()
         2, 3, 0
     };
 
-    /* vertex buffers */
-    unsigned int vbuf_id;
-    glGenBuffers(1, &vbuf_id);
-    glBindBuffer(GL_ARRAY_BUFFER, vbuf_id);
-    glBufferData(GL_ARRAY_BUFFER, 8*sizeof(float), triangle_pos, GL_STATIC_DRAW);
+    /* vertex array object */
+    unsigned int vao_id;
+    glCall(glGenVertexArrays(1, &vao_id));
+    glCall(glBindVertexArray(vao_id));
 
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0);
+    /* vertex buffers */
+    VertexBuffer vb(triangle_pos, 8, GL_STATIC_DRAW);
+    vb.bind();
+
+    glCall(glEnableVertexAttribArray(0));
+    glCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), 0));
 
     /* index buffers */
-    unsigned int ibuf_id;
-    glGenBuffers(1, &ibuf_id);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibuf_id);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6*sizeof(unsigned int), indicies, GL_STATIC_DRAW);
+    IndexBuffer ib(indicies, 6, GL_STATIC_DRAW);
+    ib.bind();
 
     /* shaders */
     std::string vertexShader = readShader("shaders/basicVertex.shader");
@@ -57,14 +66,29 @@ main()
     // TODO: check for errors reading shader files
 
     unsigned int shader = generateShader(vertexShader, fragmentShader);
-    glUseProgram(shader);
+    glCall(glUseProgram(shader));
+
+    /* uniforms */
+    int u_Color_loc = glGetUniformLocation(shader, "u_Color");
+    // TODO: check invalid location
+
+    /* clean up */
+    glCall(glBindVertexArray(0));
+    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+    glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    glCall(glUseProgram(0));
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glCall(glClear(GL_COLOR_BUFFER_BIT));
 
-        glCall(glDrawElements(GL_TRIANGLES, 6, GL_INT, nullptr));
+        /* prepare draw call */
+        glCall(glUseProgram(shader));
+        glCall(glUniform4f(u_Color_loc, 1.0f, 1.0f, 0.0f, 1.0f));
+
+        glCall(glBindVertexArray(vao_id));
+        glCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
 
         glfwSwapBuffers(win);
         glfwPollEvents();

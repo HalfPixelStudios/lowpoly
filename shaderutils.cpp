@@ -7,6 +7,7 @@
 #include <cstring>
 
 #include "headers/shaderutils.h"
+#include "headers/glutils.h"
 
 /* reads shader file into string */
 std::string
@@ -35,13 +36,13 @@ generateShader(const std::string& vertexShader, const std::string& fragmentShade
     unsigned int vs = compileShader(GL_VERTEX_SHADER, vertexShader);
     unsigned int fs = compileShader(GL_FRAGMENT_SHADER, fragmentShader);
 
-    glAttachShader(prog, vs);
-    glAttachShader(prog, fs);
-    glLinkProgram(prog);
-    glValidateProgram(prog);
+    glCall(glAttachShader(prog, vs));
+    glCall(glAttachShader(prog, fs));
+    glCall(glLinkProgram(prog));
+    glCall(glValidateProgram(prog));
 
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+    glCall(glDeleteShader(vs));
+    glCall(glDeleteShader(fs));
 
     return prog;
 }
@@ -52,21 +53,21 @@ compileShader(unsigned int type, const std::string& src)
 {
     unsigned int id = glCreateShader(type);
     const char* csrc = src.c_str();
-    glShaderSource(id, 1, &csrc, nullptr);
-    glCompileShader(id);
+    glCall(glShaderSource(id, 1, &csrc, nullptr));
+    glCall(glCompileShader(id));
 
     /* get shader compilation result */
     int comp_result;
-    glGetShaderiv(id, GL_COMPILE_STATUS, &comp_result);
+    glCall(glGetShaderiv(id, GL_COMPILE_STATUS, &comp_result));
     if (comp_result == GL_FALSE) {
         int err_len;
-        glGetShaderiv(id, GL_INFO_LOG_LENGTH, &err_len);
+        glCall(glGetShaderiv(id, GL_INFO_LOG_LENGTH, &err_len));
         char* err_msg = (char*)alloca(err_len*sizeof(char));
-        glGetShaderInfoLog(id, err_len, &err_len, err_msg);
+        glCall(glGetShaderInfoLog(id, err_len, &err_len, err_msg));
 
         std::cout << "Failed to compile shader" << std::endl;
         std::cout << err_msg << std::endl;
-        glDeleteShader(id);
+        glCall(glDeleteShader(id));
         return 0;
     }
 
