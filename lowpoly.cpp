@@ -45,34 +45,29 @@ main()
 
     /* vertex array object */
     VertexArrayObject vao;
+
     VertexBuffer vb(triangle_pos, 8, GL_STATIC_DRAW);
     vb.bind();
 
     vao.addAttribute<float>(2);
     vao.bindToVertexBuffer(vb);
 
-    /* index buffers */
     IndexBuffer ib(indicies, 6, GL_STATIC_DRAW);
     ib.bind();
 
     /* shaders */
-    std::string vertexShader = readShader("shaders/basicVertex.shader");
-    std::string fragmentShader = readShader("shaders/basicFragment.shader");
-
-    // TODO: check for errors reading shader files
-
-    unsigned int shader = generateShader(vertexShader, fragmentShader);
-    glCall(glUseProgram(shader));
+    Shader basic_shader("shaders/basicVertex.shader", "shaders/basicFragment.shader");
+    basic_shader.bind();
 
     /* uniforms */
-    int u_Color_loc = glGetUniformLocation(shader, "u_Color");
+    int u_Color_loc = basic_shader.getUniformLocation("u_Color");
     // TODO: check invalid location
 
     /* clean up */
-    glCall(glBindVertexArray(0));
-    glCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    glCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-    glCall(glUseProgram(0));
+    vao.unbind();
+    vb.unbind();
+    ib.unbind();
+    basic_shader.unbind();
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -80,7 +75,7 @@ main()
         glCall(glClear(GL_COLOR_BUFFER_BIT));
 
         /* prepare draw call */
-        glCall(glUseProgram(shader));
+        basic_shader.bind();
         glCall(glUniform4f(u_Color_loc, 1.0f, 1.0f, 0.0f, 1.0f));
 
         vao.bind();
