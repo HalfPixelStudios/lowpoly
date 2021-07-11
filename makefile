@@ -1,18 +1,18 @@
 
 CC=g++
-CFLAGS=-Wall -Wno-int-to-pointer-cast
+CFLAGS=-pipe -O2 -Wall -Wno-int-to-pointer-cast
 LIBS=-lglfw -lGL -lGLEW
-# LIBS=-lglfw -lGL -lX11 -lGLEW -lpthread -lXrandr -lXi -ldl
 
-SRC=shaderutils glutils renderobjects renderer
-OBJ=$(addsuffix .cpp,${SRC})
+SRC=shaderutils glutils renderobjects renderer texture
+LIBSRC=stb_image.cpp
+OBJ=$(addsuffix .o,${SRC})
 
 .PHONY: clean
 
 %.o: %.cpp headers/%.h
 	$(CC) $(CFLAGS) -c $<
 
-lowpoly: lowpoly.cpp ${OBJ}
+lowpoly: lowpoly.cpp ${OBJ} lib/${LIBSRC}
 	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 clean:

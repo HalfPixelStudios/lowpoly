@@ -30,7 +30,7 @@ main()
     }
 
     /* opengl config */
-    glCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE));
+    /* glCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)); */
 
     /* make a buffer */
     float triangle_pos[] = {
@@ -61,6 +61,8 @@ main()
     basic_shader.bind();
 
     // TODO: check invalid location
+
+    /* textures */
 
     /* clean up */
     vao.unbind();
