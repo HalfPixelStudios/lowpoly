@@ -4,7 +4,7 @@ CFLAGS=-Wall -Wno-int-to-pointer-cast
 LIBS=-lglfw -lGL -lGLEW
 # LIBS=-lglfw -lGL -lX11 -lGLEW -lpthread -lXrandr -lXi -ldl
 
-SRC=shaderutils glutils renderobjects
+SRC=shaderutils glutils renderobjects renderer
 OBJ=$(addsuffix .cpp,${SRC})
 
 .PHONY: clean

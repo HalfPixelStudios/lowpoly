@@ -5,6 +5,7 @@
 #include "headers/shaderutils.h"
 #include "headers/glutils.h"
 #include "headers/renderobjects.h"
+#include "headers/renderer.h"
 
 int
 main()
@@ -59,8 +60,6 @@ main()
     Shader basic_shader("shaders/basicVertex.shader", "shaders/basicFragment.shader");
     basic_shader.bind();
 
-    /* uniforms */
-    int u_Color_loc = basic_shader.getUniformLocation("u_Color");
     // TODO: check invalid location
 
     /* clean up */
@@ -69,17 +68,21 @@ main()
     ib.unbind();
     basic_shader.unbind();
 
+    Renderer renderer;
+
+    /* uniform stuff, move later */
+    int u_Color_loc = basic_shader.getUniformLocation("u_Color");
+
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
 
-        glCall(glClear(GL_COLOR_BUFFER_BIT));
-
-        /* prepare draw call */
+        renderer.clear();
+    
+        /* set uniforms, abstract later */
         basic_shader.bind();
         glCall(glUniform4f(u_Color_loc, 1.0f, 1.0f, 0.0f, 1.0f));
 
-        vao.bind();
-        glCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        renderer.draw(vao, ib, basic_shader);
 
         glfwSwapBuffers(win);
         glfwPollEvents();

@@ -1,6 +1,7 @@
 #ifndef __SHADERUTILS_H__
 #define __SHADERUTILS_H__
 
+#include <string>
 #include "glutils.h"
 
 class Shader

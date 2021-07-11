@@ -12,6 +12,7 @@ VertexArrayObject::VertexArrayObject(void)
 
 VertexArrayObject::~VertexArrayObject(void)
 {
+    glCall(glDeleteVertexArrays(1, &renderer_id));
 }
 
 template<> void
