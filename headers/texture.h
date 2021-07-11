@@ -8,7 +8,7 @@ private:
     unsigned int renderer_id;
     int width, height, bpp;
 public:
-    Texture(std::string& filepath);
+    Texture(const std::string& filepath);
     ~Texture(void);
     void bind(unsigned int slot) const;
     void unbind(void) const;

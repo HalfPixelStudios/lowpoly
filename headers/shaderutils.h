@@ -13,9 +13,11 @@ public:
     ~Shader(void);
     void bind(void);
     void unbind(void);
-    int getUniformLocation(std::string uniform_name);
+    void setUniform4f(const std::string& uniform_name, float f0, float f1, float f2, float f3);
+    void setUniform1i(const std::string& uniform_name, int i0);
 
 private:
+    int getUniformLocation(std::string uniform_name);
     static std::string readShader(std::string filepath);
     static unsigned int generateShader(const std::string& vertex_shader, const std::string& fragment_shader);
     static unsigned int compileShader(unsigned int type, const std::string& src);

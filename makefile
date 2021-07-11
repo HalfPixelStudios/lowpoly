@@ -1,6 +1,6 @@
 
 CC=g++
-CFLAGS=-pipe -O2 -Wall -Wno-int-to-pointer-cast
+CFLAGS=-pipe -O2 -Wall -Wno-int-to-pointer-cast -Wno-unused-but-set-variable
 LIBS=-lglfw -lGL -lGLEW
 
 SRC=shaderutils glutils renderobjects renderer texture

@@ -6,6 +6,7 @@
 #include "headers/glutils.h"
 #include "headers/renderobjects.h"
 #include "headers/renderer.h"
+#include "headers/texture.h"
 
 int
 main()
@@ -33,11 +34,11 @@ main()
     /* glCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)); */
 
     /* make a buffer */
-    float triangle_pos[] = {
-        -0.5f, -0.5f,
-         0.5f, -0.5f,
-         0.5f,  0.5f,
-        -0.5f,  0.5f
+    float verticies[] = {
+        -0.5f, -0.5f, 0.0f, 0.0f,
+         0.5f, -0.5f, 1.0f, 0.0f,
+         0.5f,  0.5f, 1.0f, 1.0f,
+        -0.5f,  0.5f, 0.0f, 1.0f
     };
     unsigned int indicies[] = {
         0, 1, 2,
@@ -47,22 +48,24 @@ main()
     /* vertex array object */
     VertexArrayObject vao;
 
-    VertexBuffer vb(triangle_pos, 8, GL_STATIC_DRAW);
+    VertexBuffer vb(verticies, sizeof(verticies)/sizeof(verticies[0]), GL_STATIC_DRAW);
     vb.bind();
 
     vao.addAttribute<float>(2);
+    vao.addAttribute<float>(2);
     vao.bindToVertexBuffer(vb);
 
-    IndexBuffer ib(indicies, 6, GL_STATIC_DRAW);
+    IndexBuffer ib(indicies, sizeof(indicies)/sizeof(indicies[0]), GL_STATIC_DRAW);
     ib.bind();
 
     /* shaders */
-    Shader basic_shader("shaders/basicVertex.shader", "shaders/basicFragment.shader");
+    Shader basic_shader("assets/shaders/basicVertex.shader", "assets/shaders/basicFragment.shader");
     basic_shader.bind();
 
     // TODO: check invalid location
 
     /* textures */
+    Texture tex("assets/textures/nagato.png");
 
     /* clean up */
     vao.unbind();
@@ -72,17 +75,17 @@ main()
 
     Renderer renderer;
 
-    /* uniform stuff, move later */
-    int u_Color_loc = basic_shader.getUniformLocation("u_Color");
-
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
 
         renderer.clear();
     
-        /* set uniforms, abstract later */
+        /* setup draw call */
         basic_shader.bind();
-        glCall(glUniform4f(u_Color_loc, 1.0f, 1.0f, 0.0f, 1.0f));
+        basic_shader.setUniform4f("u_Color", 1.0f, 1.0f, 0.0f, 1.0f);
+
+        tex.bind(0);
+        basic_shader.setUniform1i("u_Texture", 0);
 
         renderer.draw(vao, ib, basic_shader);
 

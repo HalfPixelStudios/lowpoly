@@ -17,10 +17,6 @@ void
 Renderer::draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader) const
 {
     shader.bind();
-    /* set uniforms */
-    int u_Color_loc = shader.getUniformLocation("u_Color");
-    glCall(glUniform4f(u_Color_loc, 1.0f, 1.0f, 0.0f, 1.0f));
-
     vao.bind();
     ib.bind();
 

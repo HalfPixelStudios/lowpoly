@@ -6,7 +6,7 @@
 #include "headers/texture.h"
 #include "headers/glutils.h"
 
-Texture::Texture(std::string& filepath)
+Texture::Texture(const std::string& filepath)
 {
     unsigned char* image_data = nullptr;
 
@@ -20,8 +20,8 @@ Texture::Texture(std::string& filepath)
     /* setup texture params */
     glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST));
     glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP));
-    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP));
+    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE));
+    glCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE));
 
     glCall(glTexImage2D(
         GL_TEXTURE_2D, 0, GL_RGBA8, width, height,
