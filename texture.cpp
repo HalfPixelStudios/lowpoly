@@ -2,7 +2,7 @@
 #include <GL/glew.h>
 #include <string>
 
-#include "lib/stb_image.h"
+#include "stb_image/stb_image.h"
 #include "headers/texture.h"
 #include "headers/glutils.h"
 

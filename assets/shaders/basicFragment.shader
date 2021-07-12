@@ -8,5 +8,5 @@ uniform mediump sampler2D u_Texture;
 
 void
 main() {
-    color = texture(u_Texture, v_TexCoord);
+    color = mix(texture(u_Texture, v_TexCoord), u_Color, 0.5);
 }

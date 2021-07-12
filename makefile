@@ -1,10 +1,10 @@
 
 CC=g++
-CFLAGS=-pipe -O2 -Wall -Wno-int-to-pointer-cast -Wno-unused-but-set-variable
+CFLAGS=-pipe -O2 -Wall -Wno-int-to-pointer-cast -Wno-unused-but-set-variable -Ilib
 LIBS=-lglfw -lGL -lGLEW
 
 SRC=shaderutils glutils renderobjects renderer texture
-LIBSRC=stb_image.cpp
+LIBSRC=stb_image/stb_image.cpp
 OBJ=$(addsuffix .o,${SRC})
 
 .PHONY: clean

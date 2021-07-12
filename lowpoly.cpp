@@ -32,6 +32,9 @@ main()
 
     /* opengl config */
     /* glCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)); */
+    glCall(glEnable(GL_BLEND));
+    glCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
+    glCall(glBlendEquation(GL_FUNC_ADD));
 
     /* make a buffer */
     float verticies[] = {
