@@ -2,6 +2,13 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_glfw.h"
+#include "imgui/imgui_impl_opengl3.h"
+
 #include "headers/shaderutils.h"
 #include "headers/glutils.h"
 #include "headers/renderobjects.h"
@@ -21,6 +28,7 @@ main()
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     win = glfwCreateWindow(400, 400, "LowPoly", NULL, NULL);
     glfwMakeContextCurrent(win);
@@ -32,9 +40,18 @@ main()
 
     /* opengl config */
     /* glCall(glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)); */
+    glCall(glEnable(GL_MULTISAMPLE));
+
     glCall(glEnable(GL_BLEND));
     glCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
     glCall(glBlendEquation(GL_FUNC_ADD));
+
+    /* setup imgui */
+    ImGui::CreateContext();
+    ImGui_ImplGlfw_InitForOpenGL(win, true);
+    ImGui_ImplOpenGL3_Init("#version 300 es");
+
+    ImGui::StyleColorsDark();
 
     /* make a buffer */
     float verticies[] = {
@@ -78,10 +95,19 @@ main()
 
     Renderer renderer;
 
+    bool show_demo_window = true;
+
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
 
         renderer.clear();
+
+        /* imgui */
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        ImGui::ShowDemoWindow(&show_demo_window);
     
         /* setup draw call */
         basic_shader.bind();
@@ -90,13 +116,24 @@ main()
         tex.bind(0);
         basic_shader.setUniform1i("u_Texture", 0);
 
+        glm::mat4 translate = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+        basic_shader.setUniformMat4f("u_Transform", translate);
+
         renderer.draw(vao, ib, basic_shader);
+
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(win);
         glfwPollEvents();
 
     }
 
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(win);
     glfwTerminate();
     return 0;
 }
