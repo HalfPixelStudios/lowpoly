@@ -30,7 +30,9 @@ main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    win = glfwCreateWindow(400, 400, "LowPoly", NULL, NULL);
+    const int win_width = 800;
+    const int win_height = 600;
+    win = glfwCreateWindow(win_width, win_height, "LowPoly", NULL, NULL);
     glfwMakeContextCurrent(win);
 
     if (glewInit() != GLEW_OK) {
@@ -94,8 +96,13 @@ main()
     basic_shader.unbind();
 
     Renderer renderer;
-
     bool show_demo_window = true;
+
+    /* glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)win_width/win_height, 0.1f, 100.0f); */ 
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)4/3, 0.1f, 100.0f); 
+    /* glm::mat4 projection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, -100.0f, 100.0f); */
+    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
+    glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 2.0f, 2.0f));
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -116,11 +123,15 @@ main()
         tex.bind(0);
         basic_shader.setUniform1i("u_Texture", 0);
 
-        glm::mat4 translate = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-        basic_shader.setUniformMat4f("u_Transform", translate);
+        glm::mat4 newModel= glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 1.0f));
+
+        /* glm::mat4 mvp = projection * view * model; */
+        glm::mat4 mvp = projection * view * newModel;
+        basic_shader.setUniformMat4f("u_MVP", mvp);
 
         renderer.draw(vao, ib, basic_shader);
 
+        /* render imgui */
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
@@ -129,6 +140,7 @@ main()
 
     }
 
+    /* clean up */
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

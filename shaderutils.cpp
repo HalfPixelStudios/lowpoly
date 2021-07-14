@@ -6,6 +6,8 @@
 #include <sstream>
 #include <cstring>
 
+#include "glm/gtc/type_ptr.hpp"
+
 #include "headers/shaderutils.h"
 #include "headers/glutils.h"
 

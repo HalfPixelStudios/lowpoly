@@ -6,6 +6,7 @@
 #include "headers/renderobjects.h"
 
 VertexArrayObject::VertexArrayObject(void)
+    : stride(0)
 {
     glCall(glGenVertexArrays(1, &renderer_id));
 }
