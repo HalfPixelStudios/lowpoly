@@ -20,12 +20,12 @@ Renderer::draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader) const
     vao.bind();
     ib.bind();
 
-    glCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+    glCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr));
 }
 
 void
 Renderer::clear(void) const
 {
-    glCall(glClear(GL_COLOR_BUFFER_BIT));
+    glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
 }
 
