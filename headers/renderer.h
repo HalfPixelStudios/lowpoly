@@ -10,7 +10,7 @@ class Renderer
 public:
     Renderer(void);
     ~Renderer(void);
-    void draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader) const;
+    void draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader, unsigned int triangle_count) const;
     void clear(void) const;
 };
 

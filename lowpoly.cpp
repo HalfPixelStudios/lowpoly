@@ -15,6 +15,7 @@
 #include "headers/renderer.h"
 #include "headers/texture.h"
 #include "headers/primitive.h"
+#include "headers/camera.h"
 
 int
 main()
@@ -89,13 +90,7 @@ main()
     Renderer renderer;
     bool show_demo_window = true;
 
-    /* glm::mat4 cam_position = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f)); */
-    /* glm::mat4 cam_target = glm::mat4(1.0f); */
-    /* glm::mat4 cam_direction = glm::normalize(cam_position - cam_target); */
-
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)4/3, 0.1f, 100.0f); 
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -3.0f));
-    glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(1.0f, 1.0f, 1.0f));
+    Camera main_cam(glm::vec3(0.0f, 0.0f, -5.0f), 10.0f);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -116,13 +111,18 @@ main()
         tex.bind(0);
         basic_shader.setUniform1i("u_Texture", 0);
 
-        glm::mat4 newModel= glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+        /* mvp */
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)4/3, 0.1f, 100.0f); 
 
-        /* glm::mat4 mvp = projection * view * model; */
-        glm::mat4 mvp = projection * view * newModel;
+        glm::mat4 view = main_cam.getViewMatrix();
+
+        glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 1.0f, 1.0f));
+        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+
+        glm::mat4 mvp = projection * view * model;
         basic_shader.setUniformMat4f("u_MVP", mvp);
 
-        renderer.draw(vao, ib, basic_shader);
+        renderer.draw(vao, ib, basic_shader, 12);
 
         /* render imgui */
         ImGui::Render();

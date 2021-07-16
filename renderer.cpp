@@ -14,13 +14,13 @@ Renderer::~Renderer(void)
 }
 
 void
-Renderer::draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader) const
+Renderer::draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader, unsigned int triangle_count) const
 {
     shader.bind();
     vao.bind();
     ib.bind();
 
-    glCall(glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr));
+    glCall(glDrawElements(GL_TRIANGLES, triangle_count*3, GL_UNSIGNED_INT, nullptr));
 }
 
 void
