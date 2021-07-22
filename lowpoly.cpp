@@ -90,7 +90,7 @@ main()
     Renderer renderer;
     bool show_demo_window = true;
 
-    Camera main_cam(glm::vec3(0.0f, 0.0f, -5.0f), 10.0f);
+    Camera main_cam(1.0f);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -127,6 +127,9 @@ main()
         /* render imgui */
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        /* input */
+        main_cam.processInput(win);
 
         glfwSwapBuffers(win);
         glfwPollEvents();
