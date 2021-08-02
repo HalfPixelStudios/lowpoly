@@ -34,8 +34,9 @@ main()
 
     const int win_width = 800;
     const int win_height = 600;
-    win = glfwCreateWindow(win_width, win_height, "LowPoly", NULL, NULL);
+    win = glfwCreateWindow(win_width, win_height, "LowPoly", glfwGetPrimaryMonitor(), NULL);
     glfwMakeContextCurrent(win);
+    glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     if (glewInit() != GLEW_OK) {
         std::cerr << "Failed to initialize glew" << std::endl;
@@ -90,7 +91,7 @@ main()
     Renderer renderer;
     bool show_demo_window = true;
 
-    Camera main_cam(1.0f);
+    Camera main_cam(1.0f, 0.50f);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -102,7 +103,7 @@ main()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        ImGui::ShowDemoWindow(&show_demo_window);
+        /* ImGui::ShowDemoWindow(&show_demo_window); */
     
         /* setup draw call */
         basic_shader.bind();
@@ -116,8 +117,9 @@ main()
 
         glm::mat4 view = main_cam.getViewMatrix();
 
-        glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 1.0f, 1.0f));
-        model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
+        /* glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 1.0f, 1.0f)); */
+        /* model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f)); */
+        glm::mat4 model = glm::mat4(1.0f);
 
         glm::mat4 mvp = projection * view * model;
         basic_shader.setUniformMat4f("u_MVP", mvp);
@@ -129,7 +131,8 @@ main()
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         /* input */
-        main_cam.processInput(win);
+        main_cam.processKeyboardInput(win);
+        main_cam.processMouseInput(win);
 
         glfwSwapBuffers(win);
         glfwPollEvents();

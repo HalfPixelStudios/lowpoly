@@ -10,12 +10,16 @@ class Camera
 {
 private:
     glm::vec3 position;
+    glm::vec3 rotation; // pitch, yaw, roll (in degrees)
     glm::vec3 cam_forward;
+    glm::vec2 prev_mouse;
     float move_speed;
+    float sensitivity;
 public:
-    Camera(float move_speed);
+    Camera(float move_speed, float sensitivity);
     ~Camera(void);
-    void processInput(GLFWwindow* win);
+    void processKeyboardInput(GLFWwindow* win);
+    void processMouseInput(GLFWwindow* win);
     glm::mat4 getViewMatrix(void);
 };
 
