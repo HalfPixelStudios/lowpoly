@@ -16,6 +16,7 @@
 #include "headers/texture.h"
 #include "headers/primitive.h"
 #include "headers/camera.h"
+#include "headers/light.h"
 
 int
 main()
@@ -60,9 +61,8 @@ main()
 
     ImGui::StyleColorsDark();
 
-    /* vertex array object */
+    /* setup objects */
     VertexArrayObject vao;
-
     VertexBuffer vb(cube_verticies, sizeof(cube_verticies)/sizeof(cube_verticies[0]), GL_STATIC_DRAW);
     vb.bind();
 
@@ -71,27 +71,25 @@ main()
     vao.bindToVertexBuffer(vb);
 
     IndexBuffer ib(cube_indicies, sizeof(cube_indicies)/sizeof(cube_indicies[0]), GL_STATIC_DRAW);
-    ib.bind();
+
+    vao.unbind();
+    vb.unbind();
+    ib.unbind();
 
     /* shaders */
-    Shader basic_shader("assets/shaders/basicVertex.shader", "assets/shaders/basicFragment.shader");
-    basic_shader.bind();
+    Shader default_shader("assets/shaders/defaultVertex.shader", "assets/shaders/defaultFragment.shader");
+    Shader textured_shader("assets/shaders/texturedVertex.shader", "assets/shaders/texturedFragment.shader");
 
     // TODO: check invalid location
 
     /* textures */
     Texture tex("assets/textures/nagato.png");
 
-    /* clean up */
-    vao.unbind();
-    vb.unbind();
-    ib.unbind();
-    basic_shader.unbind();
-
     Renderer renderer;
     bool show_demo_window = true;
 
-    Camera main_cam(1.0f, 0.50f);
+    Camera main_cam(0.50f, 0.50f);
+    Light main_light(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -105,34 +103,30 @@ main()
 
         /* ImGui::ShowDemoWindow(&show_demo_window); */
     
-        /* setup draw call */
-        basic_shader.bind();
-        basic_shader.setUniform4f("u_Color", 1.0f, 1.0f, 0.0f, 1.0f);
-
-        tex.bind(0);
-        basic_shader.setUniform1i("u_Texture", 0);
-
         /* mvp */
         glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)4/3, 0.1f, 100.0f); 
-
         glm::mat4 view = main_cam.getViewMatrix();
 
-        /* glm::mat4 model = glm::scale(glm::mat4(1.0f), glm::vec3(2.0f, 1.0f, 1.0f)); */
-        /* model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f)); */
+        /* setup draw call */
+        glm::vec3 ambient_color = main_light.getColor() * 0.1f;
+        glm::vec3 model_color = glm::vec3(1.0f, 0.5f, 0.3f);
+
+        default_shader.bind();
+        default_shader.setUniform3f("u_ModelColor", model_color);
+        default_shader.setUniform3f("u_AmbientColor", ambient_color);
+
         glm::mat4 model = glm::mat4(1.0f);
-
         glm::mat4 mvp = projection * view * model;
-        basic_shader.setUniformMat4f("u_MVP", mvp);
+        default_shader.setUniformMat4f("u_MVP", mvp);
 
-        renderer.draw(vao, ib, basic_shader, 12);
+        renderer.draw(vao, ib, default_shader, 12);
 
         /* render imgui */
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         /* input */
-        main_cam.processKeyboardInput(win);
-        main_cam.processMouseInput(win);
+        main_cam.processInput(win);
 
         glfwSwapBuffers(win);
         glfwPollEvents();

@@ -18,6 +18,9 @@ public:
     void bind(void);
     void unbind(void);
     void setUniform4f(const std::string& uniform_name, float f0, float f1, float f2, float f3);
+    void setUniform4f(const std::string& uniform_name, glm::vec4 v0);
+    void setUniform3f(const std::string& uniform_name, float f0, float f1, float f2);
+    void setUniform3f(const std::string& uniform_name, glm::vec3 v0);
     void setUniform1i(const std::string& uniform_name, int i0);
     void setUniformMat4f(const std::string& uniform_name, glm::mat4 m0);
 

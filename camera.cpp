@@ -18,7 +18,7 @@ Camera::~Camera(void)
 }
 
 void
-Camera::processKeyboardInput(GLFWwindow* win)
+Camera::processInput(GLFWwindow* win)
 {
 
     /* careful, there will be issues if camera is facing straight up */
@@ -33,11 +33,7 @@ Camera::processKeyboardInput(GLFWwindow* win)
         position += move_speed * cam_right;
     if (glfwGetKey(win, GLFW_KEY_A) == GLFW_PRESS)
         position -= move_speed * cam_right;
-}
 
-void
-Camera::processMouseInput(GLFWwindow* win)
-{
     double mouse_x, mouse_y;
     glfwGetCursorPos(win, &mouse_x, &mouse_y);
 

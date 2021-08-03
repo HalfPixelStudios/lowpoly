@@ -18,8 +18,7 @@ private:
 public:
     Camera(float move_speed, float sensitivity);
     ~Camera(void);
-    void processKeyboardInput(GLFWwindow* win);
-    void processMouseInput(GLFWwindow* win);
+    void processInput(GLFWwindow* win);
     glm::mat4 getViewMatrix(void);
 };
 
