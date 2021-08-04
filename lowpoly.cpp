@@ -33,8 +33,8 @@ main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
-    const int win_width = 800;
-    const int win_height = 600;
+    const int win_width = 1600;
+    const int win_height = 900;
     win = glfwCreateWindow(win_width, win_height, "LowPoly", glfwGetPrimaryMonitor(), NULL);
     glfwMakeContextCurrent(win);
     glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -68,6 +68,7 @@ main()
 
     vao.addAttribute<float>(3);
     vao.addAttribute<float>(2);
+    vao.addAttribute<float>(3);
     vao.bindToVertexBuffer(vb);
 
     IndexBuffer ib(cube_indicies, sizeof(cube_indicies)/sizeof(cube_indicies[0]), GL_STATIC_DRAW);
@@ -89,7 +90,7 @@ main()
     bool show_demo_window = true;
 
     Camera main_cam(0.50f, 0.50f);
-    Light main_light(glm::vec3(0.0f, 10.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
+    Light main_light(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -115,9 +116,13 @@ main()
         default_shader.setUniform3f("u_ModelColor", model_color);
         default_shader.setUniform3f("u_AmbientColor", ambient_color);
 
+        default_shader.setUniform3f("u_LightPosition", main_light.getPosition());
+        default_shader.setUniform3f("u_LightColor", main_light.getColor());
+
         glm::mat4 model = glm::mat4(1.0f);
-        glm::mat4 mvp = projection * view * model;
-        default_shader.setUniformMat4f("u_MVP", mvp);
+        default_shader.setUniformMat4f("u_Model", model);
+        default_shader.setUniformMat4f("u_View", view);
+        default_shader.setUniformMat4f("u_Projection", projection);
 
         renderer.draw(vao, ib, default_shader, 12);
 

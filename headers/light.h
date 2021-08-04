@@ -14,6 +14,7 @@ private:
 public:
     Light(glm::vec3 position, glm::vec3 color, float intensity);
     ~Light();
+    inline glm::vec3 getPosition(void) const { return position; }
     inline glm::vec3 getColor(void) const { return color; }
 };
 
