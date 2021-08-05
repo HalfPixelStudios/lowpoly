@@ -63,6 +63,12 @@ Shader::setUniform3f(const std::string& uniform_name, glm::vec3 v0)
 }
 
 void
+Shader::setUniform1f(const std::string& uniform_name, float f0)
+{
+    glCall(glUniform1f(getUniformLocation(uniform_name), f0));
+}
+
+void
 Shader::setUniform1i(const std::string& uniform_name, int i0)
 {
     glCall(glUniform1i(getUniformLocation(uniform_name), i0));

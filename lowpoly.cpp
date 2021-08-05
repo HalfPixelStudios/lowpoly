@@ -90,7 +90,7 @@ main()
     bool show_demo_window = true;
 
     Camera main_cam(0.50f, 0.50f);
-    Light main_light(glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
+    Light main_light(glm::vec3(8.0f, 7.0f, 10.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -114,12 +114,14 @@ main()
 
         default_shader.bind();
         default_shader.setUniform3f("u_ModelColor", model_color);
+        default_shader.setUniform1f("u_SpecularStrength", 2.0);
         default_shader.setUniform3f("u_AmbientColor", ambient_color);
-
         default_shader.setUniform3f("u_LightPosition", main_light.getPosition());
         default_shader.setUniform3f("u_LightColor", main_light.getColor());
+        default_shader.setUniform3f("u_ViewerPosition", main_cam.getPosition());
 
         glm::mat4 model = glm::mat4(1.0f);
+        /* model = glm::scale(model, glm::vec3(1.0f, 2.0f, 1.0f)); */
         default_shader.setUniformMat4f("u_Model", model);
         default_shader.setUniformMat4f("u_View", view);
         default_shader.setUniformMat4f("u_Projection", projection);

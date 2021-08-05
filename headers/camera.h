@@ -20,6 +20,7 @@ public:
     ~Camera(void);
     void processInput(GLFWwindow* win);
     glm::mat4 getViewMatrix(void);
+    inline glm::vec3 getPosition(void) const { return position; }
 };
 
 
