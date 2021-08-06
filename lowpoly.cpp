@@ -35,7 +35,7 @@ main()
 
     const int win_width = 1600;
     const int win_height = 900;
-    win = glfwCreateWindow(win_width, win_height, "LowPoly", glfwGetPrimaryMonitor(), NULL);
+    win = glfwCreateWindow(win_width, win_height, "LowPoly", NULL, NULL);
     glfwMakeContextCurrent(win);
     glfwSetInputMode(win, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -62,24 +62,25 @@ main()
     ImGui::StyleColorsDark();
 
     /* setup objects */
-    VertexArrayObject vao;
-    VertexBuffer vb(cube_verticies, sizeof(cube_verticies)/sizeof(cube_verticies[0]), GL_STATIC_DRAW);
-    vb.bind();
+    VertexArrayObject cube_vao;
+    VertexBuffer cube_vb(cube_verticies, sizeof(cube_verticies)/sizeof(cube_verticies[0]), GL_STATIC_DRAW);
+    cube_vb.bind();
 
-    vao.addAttribute<float>(3);
-    vao.addAttribute<float>(2);
-    vao.addAttribute<float>(3);
-    vao.bindToVertexBuffer(vb);
+    cube_vao.addAttribute<float>(3);
+    cube_vao.addAttribute<float>(2);
+    cube_vao.addAttribute<float>(3);
+    cube_vao.bindToVertexBuffer(cube_vb);
 
-    IndexBuffer ib(cube_indicies, sizeof(cube_indicies)/sizeof(cube_indicies[0]), GL_STATIC_DRAW);
+    IndexBuffer cube_ib(cube_indicies, sizeof(cube_indicies)/sizeof(cube_indicies[0]), GL_STATIC_DRAW);
 
-    vao.unbind();
-    vb.unbind();
-    ib.unbind();
+    cube_vao.unbind();
+    cube_vb.unbind();
+    cube_ib.unbind();
 
     /* shaders */
     Shader default_shader("assets/shaders/defaultVertex.shader", "assets/shaders/defaultFragment.shader");
     Shader textured_shader("assets/shaders/texturedVertex.shader", "assets/shaders/texturedFragment.shader");
+    Shader unlit_shader("assets/shaders/unlitVertex.shader", "assets/shaders/unlitFragment.shader");
 
     // TODO: check invalid location
 
@@ -89,8 +90,8 @@ main()
     Renderer renderer;
     bool show_demo_window = true;
 
-    Camera main_cam(0.50f, 0.50f);
-    Light main_light(glm::vec3(8.0f, 7.0f, 10.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
+    Camera main_cam(0.25f, 0.25f);
+    Light main_light(glm::vec3(4.0f, 4.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
@@ -109,24 +110,33 @@ main()
         glm::mat4 view = main_cam.getViewMatrix();
 
         /* setup draw call */
-        glm::vec3 ambient_color = main_light.getColor() * 0.1f;
-        glm::vec3 model_color = glm::vec3(1.0f, 0.5f, 0.3f);
-
         default_shader.bind();
-        default_shader.setUniform3f("u_ModelColor", model_color);
-        default_shader.setUniform1f("u_SpecularStrength", 2.0);
-        default_shader.setUniform3f("u_AmbientColor", ambient_color);
-        default_shader.setUniform3f("u_LightPosition", main_light.getPosition());
-        default_shader.setUniform3f("u_LightColor", main_light.getColor());
-        default_shader.setUniform3f("u_ViewerPosition", main_cam.getPosition());
+        default_shader.setUniform3f("u_Material.ambient", main_light.getColor() * 0.1f);
+        default_shader.setUniform3f("u_Material.diffuse", glm::vec3(1.0f, 0.5f, 0.3f));
+        default_shader.setUniform1f("u_Material.specular", 2.0);
+
+        default_shader.setUniform3f("u_Light.lightPosition", main_light.getPosition());
+        default_shader.setUniform3f("u_Light.lightColor", main_light.getColor());
+        default_shader.setUniform3f("u_Light.viewerPosition", main_cam.getPosition());
 
         glm::mat4 model = glm::mat4(1.0f);
-        /* model = glm::scale(model, glm::vec3(1.0f, 2.0f, 1.0f)); */
-        default_shader.setUniformMat4f("u_Model", model);
-        default_shader.setUniformMat4f("u_View", view);
-        default_shader.setUniformMat4f("u_Projection", projection);
+        /* model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f)); */
+        default_shader.setUniformMat4f("u_MVP.model", model);
+        default_shader.setUniformMat4f("u_MVP.view", view);
+        default_shader.setUniformMat4f("u_MVP.projection", projection);
 
-        renderer.draw(vao, ib, default_shader, 12);
+        renderer.draw(cube_vao, cube_ib, default_shader, 12);
+
+        /* unlit_shader.bind(); */
+        /* unlit_shader.setUniform3f("u_ModelColor", main_light.getColor()); */
+
+        /* model = glm::mat4(1.0f); */
+        /* model = glm::translate(model, main_light.getPosition()); */
+        /* unlit_shader.setUniformMat4f("u_Model", model); */
+        /* unlit_shader.setUniformMat4f("u_View", view); */
+        /* unlit_shader.setUniformMat4f("u_Projection", projection); */
+        
+        /* renderer.draw(cube_vao, cube_ib, unlit_shader, 12); */
 
         /* render imgui */
         ImGui::Render();
