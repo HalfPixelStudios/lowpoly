@@ -94,6 +94,13 @@ main()
     Camera main_cam(0.25f, 0.25f);
     Light main_light(glm::vec3(4.0f, 4.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
+    glm::vec3 crate_positions[200];
+    float crate_radius = 20;
+    #define randRange 2*((double)rand()/RAND_MAX - 0.5)
+    for (int i = 0; i < 200; i++) {
+        crate_positions[i] = glm::vec3(crate_radius*randRange, crate_radius*randRange, crate_radius*randRange);
+    }
+
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
 
@@ -123,13 +130,19 @@ main()
         default_shader.setUniform1f("u_Light.specularStrength", 4.0);
         default_shader.setUniform1f("u_Light.specularShininess", 2.0);
 
-        glm::mat4 model = glm::mat4(1.0f);
+        default_shader.setUniform1f("u_Light.attenuationLinear", 0.09f);
+        default_shader.setUniform1f("u_Light.attenuationQuadratic", 0.032f);
+
         /* model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f)); */
-        default_shader.setUniformMat4f("u_MVP.model", model);
         default_shader.setUniformMat4f("u_MVP.view", view);
         default_shader.setUniformMat4f("u_MVP.projection", projection);
 
-        renderer.draw(cube_vao, cube_ib, default_shader, 12);
+        glm::mat4 model;
+        for (int i = 0; i < sizeof(crate_positions)/sizeof(glm::vec3); i++) {
+            model = glm::translate(glm::mat4(1.0), crate_positions[i]);
+            default_shader.setUniformMat4f("u_MVP.model", model);
+            renderer.draw(cube_vao, cube_ib, default_shader, 12);
+        }
 
         unlit_shader.bind();
         unlit_shader.setUniform3f("u_ModelColor", main_light.getColor());

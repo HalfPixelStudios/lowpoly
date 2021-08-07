@@ -20,6 +20,9 @@ struct Light {
     mediump vec3 color;
     mediump float specularStrength;
     mediump float specularShininess;
+
+    mediump float attenuationLinear;
+    mediump float attenuationQuadratic;
 };
 uniform Light u_Light;
 

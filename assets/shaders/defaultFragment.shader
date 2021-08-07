@@ -18,6 +18,9 @@ struct Light {
     mediump vec3 color;
     mediump float specularStrength; // brightness of specular
     mediump float specularShininess;  // shininess of specular (tendancy to bounce light)
+
+    mediump float attenuationLinear; // linear term for point light attenuation
+    mediump float attenuationQuadratic; //quadratic term for point light attenuation
 };
 uniform Light u_Light;
 
@@ -40,5 +43,9 @@ main() {
         * pow(max(dot(viewRay, reflectedRay), 0.0), u_Light.specularShininess)
         * vec4(u_Light.color, 1.0);
 
-    color = texture(u_Material.diffuse, v_TexCoord) * (ambientLight + diffuseLight + specularLight);
+    /* calculate point light attenuation */
+    mediump float distanceToLight = distance(v_LightPosition, v_FragPosition);
+    mediump float attenuation = 1.0/(1.0 + u_Light.attenuationLinear*distanceToLight + u_Light.attenuationQuadratic*pow(distanceToLight, 2.0));
+
+    color = texture(u_Material.diffuse, v_TexCoord) * (ambientLight + diffuseLight + specularLight) * vec4(attenuation*vec3(1.0, 1.0, 1.0), 1.0);
 }
