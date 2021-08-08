@@ -125,7 +125,9 @@ main()
         container_specularMap.bind(0);
         default_shader.setUniform1i("u_Material.specular", 0);
 
+        default_shader.setUniform1i("u_Light.type", 0);
         default_shader.setUniform3f("u_Light.position", main_light.getPosition());
+        default_shader.setUniform3f("u_Light.direction", main_light.getPosition());
         default_shader.setUniform3f("u_Light.color", main_light.getColor());
         default_shader.setUniform1f("u_Light.specularStrength", 4.0);
         default_shader.setUniform1f("u_Light.specularShininess", 2.0);

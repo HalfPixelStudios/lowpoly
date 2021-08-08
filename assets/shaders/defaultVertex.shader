@@ -7,6 +7,7 @@ out mediump vec2 v_TexCoord;
 out mediump vec3 v_Normal;
 out mediump vec3 v_FragPosition;
 out mediump vec3 v_LightPosition;
+out mediump vec3 v_LightDirection;
 
 struct MVP {
     mediump mat4 model;
@@ -16,13 +17,18 @@ struct MVP {
 uniform MVP u_MVP;
 
 struct Light {
+    mediump int type;
+
     mediump vec3 position;
+    mediump vec3 direction;
     mediump vec3 color;
     mediump float specularStrength;
     mediump float specularShininess;
 
     mediump float attenuationLinear;
     mediump float attenuationQuadratic;
+
+    mediump float spotlightAngle;
 };
 uniform Light u_Light;
 
@@ -33,4 +39,5 @@ main() {
     v_Normal = vec3(u_MVP.view * u_MVP.model * vec4(normal, 0.0));
     v_FragPosition = vec3(u_MVP.view * u_MVP.model * vec4(pos, 1.0)); // position of each fragment in world space
     v_LightPosition = vec3(u_MVP.view * vec4(u_Light.position, 1.0));
-};
+    v_LightDirection = vec3(u_MVP.view * vec4(u_Light.direction, 0.0));
+}
