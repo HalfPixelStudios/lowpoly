@@ -28,7 +28,8 @@ struct Light {
     mediump float attenuationLinear;
     mediump float attenuationQuadratic;
 
-    mediump float spotlightAngle;
+    mediump float innerCutoff;
+    mediump float outerCutoff;
 };
 uniform Light u_Light;
 

@@ -125,15 +125,18 @@ main()
         container_specularMap.bind(0);
         default_shader.setUniform1i("u_Material.specular", 0);
 
-        default_shader.setUniform1i("u_Light.type", 0);
-        default_shader.setUniform3f("u_Light.position", main_light.getPosition());
-        default_shader.setUniform3f("u_Light.direction", main_light.getPosition());
+        default_shader.setUniform1i("u_Light.type", 2);
+        default_shader.setUniform3f("u_Light.position", main_cam.getPosition());
+        default_shader.setUniform3f("u_Light.direction", main_cam.getForwardVector());
         default_shader.setUniform3f("u_Light.color", main_light.getColor());
         default_shader.setUniform1f("u_Light.specularStrength", 4.0);
         default_shader.setUniform1f("u_Light.specularShininess", 2.0);
 
-        default_shader.setUniform1f("u_Light.attenuationLinear", 0.09f);
-        default_shader.setUniform1f("u_Light.attenuationQuadratic", 0.032f);
+        default_shader.setUniform1f("u_Light.attenuationLinear", 0.045f);
+        default_shader.setUniform1f("u_Light.attenuationQuadratic", 0.0075f);
+
+        default_shader.setUniform1f("u_Light.innerCutoff", glm::cos(glm::radians(12.0f)));
+        default_shader.setUniform1f("u_Light.outerCutoff", glm::cos(glm::radians(14.0f)));
 
         /* model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f)); */
         default_shader.setUniformMat4f("u_MVP.view", view);
@@ -146,16 +149,16 @@ main()
             renderer.draw(cube_vao, cube_ib, default_shader, 12);
         }
 
-        unlit_shader.bind();
-        unlit_shader.setUniform3f("u_ModelColor", main_light.getColor());
+        /* unlit_shader.bind(); */
+        /* unlit_shader.setUniform3f("u_ModelColor", main_light.getColor()); */
 
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, main_light.getPosition());
-        unlit_shader.setUniformMat4f("u_MVP.model", model);
-        unlit_shader.setUniformMat4f("u_MVP.view", view);
-        unlit_shader.setUniformMat4f("u_MVP.projection", projection);
+        /* model = glm::mat4(1.0f); */
+        /* model = glm::translate(model, main_light.getPosition()); */
+        /* unlit_shader.setUniformMat4f("u_MVP.model", model); */
+        /* unlit_shader.setUniformMat4f("u_MVP.view", view); */
+        /* unlit_shader.setUniformMat4f("u_MVP.projection", projection); */
         
-        renderer.draw(cube_vao, cube_ib, unlit_shader, 12);
+        /* renderer.draw(cube_vao, cube_ib, unlit_shader, 12); */
 
         /* render imgui */
         ImGui::Render();

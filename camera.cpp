@@ -49,16 +49,20 @@ Camera::processInput(GLFWwindow* win)
 glm::mat4
 Camera::getViewMatrix(void)
 {
-    /* calculate cam forward */
-    cam_forward = glm::normalize(glm::vec3(
-        cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x)),
-        sin(glm::radians(rotation.x)),
-        sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x))
-    ));
-
+    cam_forward = getForwardVector(); // recalculate forward
     return glm::lookAt(
         position,
         position+cam_forward,
         glm::vec3(0.0f, 1.0f, 0.0f)
     );
+}
+
+glm::vec3
+Camera::getForwardVector(void) const
+{
+    return glm::normalize(glm::vec3(
+        cos(glm::radians(rotation.y)) * cos(glm::radians(rotation.x)),
+        sin(glm::radians(rotation.x)),
+        sin(glm::radians(rotation.y)) * cos(glm::radians(rotation.x))
+    ));
 }
