@@ -7,35 +7,26 @@ in mediump vec3 v_FragPosition;
 in mediump vec3 v_LightPosition;
 in mediump vec3 v_LightDirection;
 
-struct Material {
-    mediump vec3 ambient;
-    mediump sampler2D diffuse;
-    mediump sampler2D specular;
-};
+#include assets/shaders/common.shaderh
+
 uniform Material u_Material;
-
-#define LIGHTTYPE_DIRECTIONAL 0
-#define LIGHTTYPE_POINT       1
-#define LIGHTTYPE_SPOTLIGHT   2
-struct Light {
-    mediump int type; // enum for type of light
-
-    mediump vec3 position; // don't use this uniform in fragment shader, this one is not in view space
-    mediump vec3 direction;
-    mediump vec3 color;
-    mediump float specularStrength; // brightness of specular
-    mediump float specularShininess;  // shininess of specular (tendancy to bounce light)
-
-    /* point light specific */
-    mediump float attenuationLinear; // linear term for point light attenuation
-    mediump float attenuationQuadratic; //quadratic term for point light attenuation
-
-    /* spotlight specific */
-    mediump float innerCutoff; // pass this in as a cosine of an angle (less work for gpu)
-    mediump float outerCutoff;
-
-};
 uniform Light u_Light;
+
+/* struct PointLight { */
+/*     mediump vec3 position; // don't use this uniform in fragment shader, this one is not in view space */
+/*     mediump vec3 color; */
+/*     mediump float specularStrength; // brightness of specular */
+/*     mediump float specularShininess;  // shininess of specular (tendancy to bounce light) */
+
+/*     mediump float attenuationLinear; // linear term for point light attenuation */
+/*     mediump float attenuationQuadratic; //quadratic term for point light attenuation */
+/* }; */
+
+/* struct DirectionalLight { */
+/* }; */
+
+/* struct SpotLight { */
+/* }; */
 
 void
 main() {

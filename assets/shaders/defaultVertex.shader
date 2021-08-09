@@ -16,21 +16,8 @@ struct MVP {
 };
 uniform MVP u_MVP;
 
-struct Light {
-    mediump int type;
+#include assets/shaders/common.shaderh
 
-    mediump vec3 position;
-    mediump vec3 direction;
-    mediump vec3 color;
-    mediump float specularStrength;
-    mediump float specularShininess;
-
-    mediump float attenuationLinear;
-    mediump float attenuationQuadratic;
-
-    mediump float innerCutoff;
-    mediump float outerCutoff;
-};
 uniform Light u_Light;
 
 void
