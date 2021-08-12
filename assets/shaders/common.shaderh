@@ -10,9 +10,16 @@ struct Material {
     mediump sampler2D specular;
 };
 
-#define MAX_DIRECTIONAL_LIGHTS 2
-#define MAX_POINT_LIGHTS 4
+#define MAX_DIRECTIONAL_LIGHTS 1
+#define MAX_POINT_LIGHTS 1
 #define MAX_SPOT_LIGHTS 1
+
+struct DirectionalLight {
+    mediump vec3 direction;
+    mediump vec3 color;
+    mediump float specularStrength; // brightness of specular
+    mediump float specularShininess;  // shininess of specular (tendancy to bounce light)
+};
 
 struct PointLight {
     mediump vec3 position;
@@ -24,15 +31,9 @@ struct PointLight {
     mediump float attenuationQuadratic; //quadratic term for point light attenuation
 };
 
-struct DirectionalLight {
-    mediump vec3 direction;
-    mediump vec3 color;
-    mediump float specularStrength; // brightness of specular
-    mediump float specularShininess;  // shininess of specular (tendancy to bounce light)
-};
-
 struct SpotLight {
     mediump vec3 position;
+    mediump vec3 direction;
     mediump vec3 color;
     mediump float specularStrength; // brightness of specular
     mediump float specularShininess;  // shininess of specular (tendancy to bounce light)

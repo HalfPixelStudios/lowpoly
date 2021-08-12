@@ -132,23 +132,22 @@ main()
         default_shader.setUniform1f("u_DirectionalLights[0].specularStrength", 4.0);
         default_shader.setUniform1f("u_DirectionalLights[0].specularShininess", 2.0);
 
-        default_shader.setUniform3f("u_DirectionalLights[1].direction", glm::vec3(-4.0f, -2.0f, 1.0f));
-        default_shader.setUniform3f("u_DirectionalLights[1].color", glm::vec3(1.0f, 0.0f, 0.0f));
-        default_shader.setUniform1f("u_DirectionalLights[1].specularStrength", 4.0);
-        default_shader.setUniform1f("u_DirectionalLights[1].specularShininess", 2.0);
+        default_shader.setUniform3f("u_PointLights[0].position", glm::vec3(0.0f, 0.0f, 0.0f));
+        default_shader.setUniform3f("u_PointLights[0].color", glm::vec3(0.0f, 0.0f, 1.0f));
+        default_shader.setUniform1f("u_PointLights[0].specularStrength", 4.0);
+        default_shader.setUniform1f("u_PointLights[0].specularShininess", 2.0);
+        default_shader.setUniform1f("u_PointLights[0].attenuationLinear", 0.045f);
+        default_shader.setUniform1f("u_PointLights[0].attenuationQuadratic", 0.0075f);
 
-        /* default_shader.setUniform1i("u_Light.type", 2); */
-        /* default_shader.setUniform3f("u_Light.position", main_cam.getPosition()); */
-        /* default_shader.setUniform3f("u_Light.direction", main_cam.getForwardVector()); */
-        /* default_shader.setUniform3f("u_Light.color", main_light.getColor()); */
-        /* default_shader.setUniform1f("u_Light.specularStrength", 4.0); */
-        /* default_shader.setUniform1f("u_Light.specularShininess", 2.0); */
-
-        /* default_shader.setUniform1f("u_Light.attenuationLinear", 0.045f); */
-        /* default_shader.setUniform1f("u_Light.attenuationQuadratic", 0.0075f); */
-
-        /* default_shader.setUniform1f("u_Light.innerCutoff", glm::cos(glm::radians(12.0f))); */
-        /* default_shader.setUniform1f("u_Light.outerCutoff", glm::cos(glm::radians(14.0f))); */
+        default_shader.setUniform3f("u_SpotLights[0].position", main_cam.getPosition());
+        default_shader.setUniform3f("u_SpotLights[0].direction", main_cam.getForwardVector());
+        default_shader.setUniform3f("u_SpotLights[0].color", glm::vec3(0.0f, 1.0f, 0.0f));
+        default_shader.setUniform1f("u_SpotLights[0].specularStrength", 4.0);
+        default_shader.setUniform1f("u_SpotLights[0].specularShininess", 2.0);
+        default_shader.setUniform1f("u_SpotLights[0].attenuationLinear", 0.045f);
+        default_shader.setUniform1f("u_SpotLights[0].attenuationQuadratic", 0.0075f);
+        default_shader.setUniform1f("u_SpotLights[0].innerCutoff", glm::cos(glm::radians(12.0f)));
+        default_shader.setUniform1f("u_SpotLights[0].outerCutoff", glm::cos(glm::radians(14.0f)));
 
         /* model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f)); */
         default_shader.setUniformMat4f("u_MVP.view", view);
