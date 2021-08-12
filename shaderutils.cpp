@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <cstring>
+#include <regex>
 
 #include "glm/gtc/type_ptr.hpp"
 
@@ -96,13 +97,46 @@ Shader::readShader(std::string filepath)
     handle.open(filepath);
     if (handle.fail()) {
         std::cerr << "Failed to open shader file: " << std::strerror(errno) << std::endl; 
-        return nullptr;
+        return "";
     }
 
     buf << handle.rdbuf();
     handle.close();
 
     return buf.str();
+}
+
+/* resolves #include preprocessor directive */
+std::string
+Shader::preprocessInclude(const std::string shader_string)
+{
+    std::string processed_shader; 
+    std::istringstream iss(shader_string);
+
+    std::regex query("^\\s*#include\\s+([^\\s]+)");
+    std::smatch matches;    
+
+    /* scan file line by line to look for #include call */
+    for (std::string line; std::getline(iss, line); ) {
+
+        if (!std::regex_search(line, matches, query)) {
+            processed_shader += (line+"\n");
+            continue;
+        } 
+
+        /* read in header file - note, include path is not relative to file for now */
+        std::string header_path = matches.str(1); // matches(1) is first matching group
+        std::string shader_header = readShader(header_path);
+        if (shader_header.empty()) {
+            std::cerr << "Failed to resolve include from file: " << header_path << std::endl; 
+            continue;
+        }
+
+        processed_shader += shader_header;
+
+    }
+
+    return processed_shader;
 }
 
 /* creates shader program */
@@ -129,8 +163,10 @@ unsigned int
 Shader::compileShader(unsigned int type, const std::string& src)
 {
     unsigned int id = glCreateShader(type);
-    const char* csrc = src.c_str();
-    glCall(glShaderSource(id, 1, &csrc, nullptr));
+    std::string processed_src = preprocessInclude(src);
+    const char* cstr = processed_src.c_str();
+
+    glCall(glShaderSource(id, 1, &cstr , nullptr));
     glCall(glCompileShader(id));
 
     /* get shader compilation result */

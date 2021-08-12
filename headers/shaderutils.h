@@ -28,6 +28,7 @@ public:
 private:
     int getUniformLocation(std::string uniform_name);
     static std::string readShader(std::string filepath);
+    static std::string preprocessInclude(const std::string shader_string);
     static unsigned int generateShader(const std::string& vertex_shader, const std::string& fragment_shader);
     static unsigned int compileShader(unsigned int type, const std::string& src);
 };
