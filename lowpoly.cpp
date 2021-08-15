@@ -101,6 +101,8 @@ main()
         crate_positions[i] = glm::vec3(crate_radius*randRange, crate_radius*randRange, crate_radius*randRange);
     }
 
+    generateUVSphere(10, 10);
+
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
 

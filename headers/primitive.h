@@ -1,71 +1,27 @@
 #ifndef __PRIMITIVE_H__
 #define __PRIMITIVE_H__
 
+#include "glm/glm.hpp"
+#include "glm/gtc/constants.hpp"
+#include <cstdio>
+
 /* contains some primitive meshes */
 
-float plane_verticies[] = {
-    -0.5f, -0.5f, 0.0f, 0.0f,
-     0.5f, -0.5f, 1.0f, 0.0f,
-     0.5f,  0.5f, 1.0f, 1.0f,
-    -0.5f,  0.5f, 0.0f, 1.0f
-};
+/* float plane_verticies[] = { */
+/*     -0.5f, -0.5f, 0.0f, 0.0f, */
+/*      0.5f, -0.5f, 1.0f, 0.0f, */
+/*      0.5f,  0.5f, 1.0f, 1.0f, */
+/*     -0.5f,  0.5f, 0.0f, 1.0f */
+/* }; */
 
-unsigned int plane_indicies[] = {
-    0, 1, 2,
-    2, 3, 0
-};
+/* unsigned int plane_indicies[] = { */
+/*     0, 1, 2, */
+/*     2, 3, 0 */
+/* }; */
 
-float cube_verticies[] = {
-    // position (x y z), texture (x y), normal (x y z)
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f, 
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+extern float cube_verticies[192];
+extern unsigned int cube_indicies[36];
 
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  1.0f,  0.0f,  0.0f,
-
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  0.0f,  0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, -1.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, -1.0f,
-
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  1.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f, -1.0f,  0.0f,  0.0f,
-
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  1.0f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  1.0f,  0.0f, -1.0f,  0.0f
-};
-
-unsigned int cube_indicies[] = {
-    0, 1, 2,
-    2, 3, 0,
-
-    4, 5, 6,
-    6, 7, 4,
-
-    8, 9, 10,
-    10, 11, 8,
-
-    12, 13, 14,
-    14, 15, 12,
-
-    16, 17, 18,
-    18, 19, 16,
-
-    20, 21, 22,
-    22, 23, 20
-};
+unsigned int generateUVSphere(int slice_count, int stack_count);
 
 #endif // __PRIMITIVE_H__

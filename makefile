@@ -3,7 +3,7 @@ CC=g++
 CFLAGS=-pipe -O2 -Wall -Wno-int-to-pointer-cast -Wno-unused-but-set-variable -Ilib
 LIBS=-lglfw -lGL -lGLEW
 
-SRC=shaderutils glutils renderobjects renderer texture camera light
+SRC=shaderutils glutils renderobjects renderer texture camera light primitive
 OBJ=$(addsuffix .o,${SRC})
 LIBOBJ=lib/stb_image/stb_image.o $(shell ls lib/imgui/*.cpp | sed 's/\.cpp/\.o/')
 
