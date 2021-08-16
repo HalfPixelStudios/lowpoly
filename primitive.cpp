@@ -2,7 +2,7 @@
 #include "headers/primitive.h"
 
 /* number of slots each vertex takes up */
-/* 3 = 3 (position)  ; do normals and texture later */
+/* 5 = 3 (position) + 2 (texture) + 3 (normal) ; do normals and texture later */
 #define SPHERE_VERTEX_STRIDE 3
 
 float plane_verticies[] = {
@@ -70,16 +70,19 @@ unsigned int cube_indicies[36] = {
     22, 23, 20
 };
 
-float*
-generateUVSphere(int slice_count, int stack_count)
+int
+generateUVSphere(int slice_count, int stack_count, int* n_vertices, int* n_indices, float** vertices, unsigned int** indices)
 {
+    //TODO: maybe check for invalid sizes
+
     const int vertex_count = slice_count*(stack_count-1) + 2; // add 2 for vertices at poles
+    const int index_count = 2*(3*slice_count) + slice_count*(stack_count-2)*2*3; // triangular faces at poles + quad faces in middle
 
     /* vertex layout in memory */
     /* first 2 vertices are the poles, followed by contiguous chains */
     /* of each slice from top to down */
     float* sphere_vertices = (float*)malloc(sizeof(float)*vertex_count*SPHERE_VERTEX_STRIDE);
-    /* unsigned int sphere_indices[]; */
+    unsigned int* sphere_indices = (unsigned int*)malloc(sizeof(unsigned int)*index_count);
 
     /* set vertices at the poles */
     sphere_vertices[0] = 0.0f;
@@ -91,6 +94,7 @@ generateUVSphere(int slice_count, int stack_count)
     sphere_vertices[5] = 0.0f;
 
     /* loop through each slice */
+    int vertex_offset = 2*SPHERE_VERTEX_STRIDE;
     for (int i = 0; i < slice_count; i++) {
 
         /* loop through each stack */
@@ -103,15 +107,59 @@ generateUVSphere(int slice_count, int stack_count)
             const float y = glm::sin(phi);
             const float z = glm::sin(theta)*glm::cos(phi);
 
-            const int vertex_offset = (i*(stack_count-1)+(j-1)+2)*SPHERE_VERTEX_STRIDE;
             sphere_vertices[vertex_offset]   = x;
             sphere_vertices[vertex_offset+1] = y;
             sphere_vertices[vertex_offset+2] = z;
 
+            vertex_offset += SPHERE_VERTEX_STRIDE;
+
         }
+
     } 
 
-    return sphere_vertices;
+    int index_offset = 0;
+    for (int i = 0; i < slice_count; i++) {
 
+        /* top triangluar faces */
+        sphere_indices[index_offset] = 0; // top pole
+        sphere_indices[index_offset+1] = i*stack_count+2; // first item in stack
+        sphere_indices[index_offset+2] = (i == slice_count-1 ? 0 : i+1)*stack_count+2; // first item next stack
+        index_offset += 3;
+
+        /* bottom triangular faces */
+        sphere_indices[index_offset] = 1; // bottom pole
+        sphere_indices[index_offset+1] = (i == slice_count-1 ? 0 : i+1)*stack_count+(stack_count-1)+2; // last item next stack
+        sphere_indices[index_offset+2] = i*stack_count+(stack_count-1)+2; // last item in stack
+        index_offset += 3;
+
+        /* middle quad faces */
+        for (int j = 0; j < stack_count-2; j++) {
+
+            sphere_indices[index_offset] = i*stack_count+j+2; // top left vertex
+            sphere_indices[index_offset+1] = i*stack_count+(j+1)+2; // bottom left vertex
+            sphere_indices[index_offset+2] = (i == slice_count-1 ? 0 : i+1)*stack_count+(j+1)+2; // bottom right vertex
+            index_offset += 3;
+
+            sphere_indices[index_offset] = (i == slice_count-1 ? 0 : i+1)*stack_count+(j+1)+2; // bottom right vertex
+            sphere_indices[index_offset+1] = (i == slice_count-1 ? 0 : i+1)*stack_count+j+2; // top right corner
+            sphere_indices[index_offset+2] = i*stack_count+j+2; // top left vertex
+            index_offset += 3;
+        }
+    }
+
+    /* for (int i = 0; i < vertex_count; i++) { */
+    /*     printf("[%i] %f,%f,%f\n", i, sphere_vertices[i*3], sphere_vertices[i*3+1], sphere_vertices[i*3+2]); */
+    /* } */
+    /* for (int i = 0; i < (int)index_count/3; i++) { */
+    /*     printf("[%i] %i,%i,%i\n", i, sphere_indices[i*3], sphere_indices[i*3+1], sphere_indices[i*3+2]); */
+    /* } */
+
+    *n_vertices = vertex_count;
+    *n_indices = index_count;
+    *vertices = sphere_vertices;
+    *indices = sphere_indices;
+
+    /* return number of triangles */
+    return (int)index_count/3;
 }
 
