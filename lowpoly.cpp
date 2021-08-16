@@ -94,14 +94,15 @@ main()
     Camera main_cam(0.25f, 0.25f);
     Light main_light(glm::vec3(4.0f, 4.0f, 4.0f), glm::vec3(1.0f, 1.0f, 1.0f), 1.0f);
 
-    glm::vec3 crate_positions[200];
+    const int crate_count = 10*(10-1)+2;
+    float* crate_vertices = generateUVSphere(10, 10); // this needs to be freed
+    glm::vec3 crate_positions[crate_count];
     float crate_radius = 20;
     #define randRange 2*((double)rand()/RAND_MAX - 0.5)
-    for (int i = 0; i < 200; i++) {
-        crate_positions[i] = glm::vec3(crate_radius*randRange, crate_radius*randRange, crate_radius*randRange);
+    for (int i = 0; i < crate_count; i++) {
+        crate_positions[i] = glm::vec3(crate_radius*crate_vertices[i*3], crate_radius*crate_vertices[i*3+1], crate_radius*crate_vertices[i*3+2]);
     }
 
-    generateUVSphere(10, 10);
 
     /* main loop */
     while (!glfwWindowShouldClose(win)) {
