@@ -64,7 +64,8 @@ main()
 
     /* setup objects */
     VertexArrayObject cube_vao;
-    VertexBuffer cube_vb(cube_verticies, sizeof(cube_verticies)/sizeof(cube_verticies[0]), GL_STATIC_DRAW);
+    /* VertexBuffer cube_vb(cube_verticies, sizeof(cube_verticies)/sizeof(cube_verticies[0]), GL_STATIC_DRAW); */
+    VertexBuffer cube_vb(cube_verticies, GL_STATIC_DRAW);
     cube_vb.bind();
 
     cube_vao.addAttribute<float>(3);
@@ -72,35 +73,35 @@ main()
     cube_vao.addAttribute<float>(3);
     cube_vao.bindToVertexBuffer(cube_vb);
 
-    IndexBuffer cube_ib(cube_indicies, sizeof(cube_indicies)/sizeof(cube_indicies[0]), GL_STATIC_DRAW);
+    IndexBuffer cube_ib(cube_indicies, GL_STATIC_DRAW);
 
     cube_vao.unbind();
     cube_vb.unbind();
     cube_ib.unbind();
 
-    int sphere_vertex_count;
-    int sphere_index_count;
-    float* sphere_vertices;
-    unsigned int* sphere_indices; // free these after
-    int sphere_triangle_count = generateUVSphere(10, 10, &sphere_vertex_count, &sphere_index_count, &sphere_vertices, &sphere_indices);
-    printf("%i, %i, %i\n", sphere_vertex_count, sphere_index_count, sphere_triangle_count);
+    /* int sphere_vertex_count; */
+    /* int sphere_index_count; */
+    /* float* sphere_vertices; */
+    /* unsigned int* sphere_indices; // free these after */
+    /* int sphere_triangle_count = generateUVSphere(10, 10, &sphere_vertex_count, &sphere_index_count, &sphere_vertices, &sphere_indices); */
+    /* printf("%i, %i, %i\n", sphere_vertex_count, sphere_index_count, sphere_triangle_count); */
 
-    for (int i = 0; i < sphere_vertex_count; i++) {
-        printf("[%i] %f,%f,%f\n", i, sphere_vertices[i*3], sphere_vertices[i*3+1], sphere_vertices[i*3+2]);
-    }
+    /* for (int i = 0; i < sphere_vertex_count; i++) { */
+    /*     printf("[%i] %f,%f,%f\n", i, sphere_vertices[i*3], sphere_vertices[i*3+1], sphere_vertices[i*3+2]); */
+    /* } */
 
-    VertexArrayObject sphere_vao;
-    VertexBuffer sphere_vb(sphere_vertices, sphere_vertex_count*3, GL_STATIC_DRAW);
-    sphere_vb.bind();
+    /* VertexArrayObject sphere_vao; */
+    /* VertexBuffer sphere_vb(sphere_vertices, sphere_vertex_count*3, GL_STATIC_DRAW); */
+    /* sphere_vb.bind(); */
 
-    sphere_vao.addAttribute<float>(3);
-    sphere_vao.bindToVertexBuffer(sphere_vb);
+    /* sphere_vao.addAttribute<float>(3); */
+    /* sphere_vao.bindToVertexBuffer(sphere_vb); */
 
-    IndexBuffer sphere_ib(sphere_indices, sphere_index_count, GL_STATIC_DRAW);
+    /* IndexBuffer sphere_ib(sphere_indices, sphere_index_count, GL_STATIC_DRAW); */
 
-    sphere_vao.unbind();
-    sphere_vb.unbind();
-    sphere_ib.unbind();
+    /* sphere_vao.unbind(); */
+    /* sphere_vb.unbind(); */
+    /* sphere_ib.unbind(); */
 
     /* shaders */
     Shader default_shader("assets/shaders/defaultVertex.shader", "assets/shaders/defaultFragment.shader");
@@ -110,8 +111,8 @@ main()
     // TODO: check invalid location
 
     /* textures */
-    Texture container_diffuseMap("assets/textures/container_diffuse.png");
-    Texture container_specularMap("assets/textures/container_specular.png");
+    Texture container_diffuseMap("assets/textures/container_diffuse.png", TextureType_Diffuse);
+    Texture container_specularMap("assets/textures/container_specular.png", TextureType_Specular);
 
     Renderer renderer;
     bool show_demo_window = true;
@@ -185,26 +186,14 @@ main()
             renderer.draw(cube_vao, cube_ib, default_shader, 12);
         }
 
-        unlit_shader.bind();
-        unlit_shader.setUniform3f("u_ModelColor", glm::vec3(1.0f, 1.0f, 1.0f));
-
-        unlit_shader.setUniformMat4f("u_MVP.view", view);
-        unlit_shader.setUniformMat4f("u_MVP.projection", projection);
-        unlit_shader.setUniformMat4f("u_MVP.model", glm::scale(glm::mat4(1.0), glm::vec3(3.0f, 3.0f, 3.0f)));
-
-        renderer.draw(sphere_vao, sphere_ib, unlit_shader, sphere_triangle_count);
-        /* renderer.draw(cube_vao, cube_ib, unlit_shader, 12); */
-
         /* unlit_shader.bind(); */
-        /* unlit_shader.setUniform3f("u_ModelColor", main_light.getColor()); */
+        /* unlit_shader.setUniform3f("u_ModelColor", glm::vec3(1.0f, 1.0f, 1.0f)); */
 
-        /* model = glm::mat4(1.0f); */
-        /* model = glm::translate(model, main_light.getPosition()); */
-        /* unlit_shader.setUniformMat4f("u_MVP.model", model); */
         /* unlit_shader.setUniformMat4f("u_MVP.view", view); */
         /* unlit_shader.setUniformMat4f("u_MVP.projection", projection); */
-        
-        /* renderer.draw(cube_vao, cube_ib, unlit_shader, 12); */
+        /* unlit_shader.setUniformMat4f("u_MVP.model", glm::scale(glm::mat4(1.0), glm::vec3(3.0f, 3.0f, 3.0f))); */
+
+        /* renderer.draw(sphere_vao, sphere_ib, unlit_shader, sphere_triangle_count); */
 
         /* render imgui */
         ImGui::Render();

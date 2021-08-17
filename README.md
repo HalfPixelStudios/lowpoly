@@ -9,6 +9,10 @@ the following external libs are used in this project
 - [stb\_image](https://github.com/nothings/stb), for reading png files
 - [imgui](https://github.com/ocornut/imgui), gui library
 
+furthermore, here are the external dependencies used
+- glfw
+- assimp (for loading models)
+
 ## resources
 
 some nice resources i used to learn a bit of opengl include

@@ -6,7 +6,8 @@
 #include "headers/texture.h"
 #include "headers/glutils.h"
 
-Texture::Texture(const std::string& filepath)
+Texture::Texture(const std::string& filepath, TextureType texture_type)
+    : texture_type(texture_type)
 {
     unsigned char* image_data = nullptr;
 

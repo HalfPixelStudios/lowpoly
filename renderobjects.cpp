@@ -1,8 +1,4 @@
 
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-
-#include "headers/glutils.h"
 #include "headers/renderobjects.h"
 
 VertexArrayObject::VertexArrayObject(void)
@@ -72,6 +68,14 @@ VertexBuffer::VertexBuffer(float* positions, int count, GLenum usage_mode)
     unbind();
 }
 
+VertexBuffer::VertexBuffer(std::vector<Vertex> positions, GLenum usage_mode)
+{
+    glCall(glGenBuffers(1, &(renderer_id)));
+    bind();
+    glCall(glBufferData(GL_ARRAY_BUFFER, positions.size()*sizeof(Vertex), &positions[0], usage_mode));
+    unbind();
+}
+
 VertexBuffer::~VertexBuffer(void)
 {
     glCall(glDeleteBuffers(1, &(renderer_id)));
@@ -96,6 +100,14 @@ IndexBuffer::IndexBuffer(unsigned int* indicies, int count, GLenum usage_mode)
     glCall(glGenBuffers(1, &(renderer_id)));
     bind();
     glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, count*sizeof(unsigned int), indicies, usage_mode));
+    unbind();
+}
+
+IndexBuffer::IndexBuffer(std::vector<unsigned int> indicies, GLenum usage_mode)
+{
+    glCall(glGenBuffers(1, &(renderer_id)));
+    bind();
+    glCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicies.size()*sizeof(unsigned int), &indicies[0], usage_mode));
     unbind();
 }
 

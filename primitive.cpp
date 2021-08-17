@@ -5,52 +5,52 @@
 /* 5 = 3 (position) + 2 (texture) + 3 (normal) ; do normals and texture later */
 #define SPHERE_VERTEX_STRIDE 3
 
-float plane_verticies[] = {
-    -0.5f, -0.5f, 0.0f, 0.0f,
-     0.5f, -0.5f, 1.0f, 0.0f,
-     0.5f,  0.5f, 1.0f, 1.0f,
-    -0.5f,  0.5f, 0.0f, 1.0f
-};
+/* float plane_verticies[] = { */
+/*     -0.5f, -0.5f, 0.0f, 0.0f, */
+/*      0.5f, -0.5f, 1.0f, 0.0f, */
+/*      0.5f,  0.5f, 1.0f, 1.0f, */
+/*     -0.5f,  0.5f, 0.0f, 1.0f */
+/* }; */
 
-unsigned int plane_indicies[] = {
-    0, 1, 2,
-    2, 3, 0
-};
+/* unsigned int plane_indicies[] = { */
+/*     0, 1, 2, */
+/*     2, 3, 0 */
+/* }; */
 
-float cube_verticies[192] = {
+std::vector<Vertex> cube_verticies {
     // position (x y z), texture (x y), normal (x y z)
-    -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  0.0f,  0.0f,  1.0f, 
-     0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  1.0f,  0.0f,  0.0f,  1.0f,
-    -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+    Vertex { glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f,  0.0f),  glm::vec3(0.0f,  0.0f,  1.0f) },
+    Vertex { glm::vec3( 0.5f, -0.5f,  0.5f),  glm::vec2(1.0f,  0.0f),  glm::vec3(0.0f,  0.0f,  1.0f) },
+    Vertex { glm::vec3( 0.5f,  0.5f,  0.5f),  glm::vec2(1.0f,  1.0f),  glm::vec3(0.0f,  0.0f,  1.0f) },
+    Vertex { glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f,  1.0f),  glm::vec3(0.0f,  0.0f,  1.0f) },
 
-     0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  1.0f,  0.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  1.0f,  0.0f,  0.0f,
+    Vertex { glm::vec3( 0.5f, -0.5f,  0.5f),  glm::vec2(0.0f,  0.0f),  glm::vec3(1.0f,  0.0f,  0.0f) },
+    Vertex { glm::vec3( 0.5f, -0.5f, -0.5f),  glm::vec2(1.0f,  0.0f),  glm::vec3(1.0f,  0.0f,  0.0f) },
+    Vertex { glm::vec3( 0.5f,  0.5f, -0.5f),  glm::vec2(1.0f,  1.0f),  glm::vec3(1.0f,  0.0f,  0.0f) },
+    Vertex { glm::vec3( 0.5f,  0.5f,  0.5f),  glm::vec2(0.0f,  1.0f),  glm::vec3(1.0f,  0.0f,  0.0f) },
 
-     0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  0.0f,  0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f, -1.0f,
-    -0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  0.0f,  0.0f, -1.0f,
-     0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, -1.0f,
+    Vertex { glm::vec3( 0.5f, -0.5f, -0.5f),  glm::vec2(0.0f,  0.0f),  glm::vec3(0.0f,  0.0f, -1.0f) },
+    Vertex { glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(1.0f,  0.0f),  glm::vec3(0.0f,  0.0f, -1.0f) },
+    Vertex { glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(1.0f,  1.0f),  glm::vec3(0.0f,  0.0f, -1.0f) },
+    Vertex { glm::vec3( 0.5f,  0.5f, -0.5f),  glm::vec2(0.0f,  1.0f),  glm::vec3(0.0f,  0.0f, -1.0f) },
 
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  1.0f,  0.0f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f,  0.5f,  1.0f,  1.0f, -1.0f,  0.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f, -1.0f,  0.0f,  0.0f,
+    Vertex { glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f,  0.0f), -glm::vec3(1.0f,  0.0f,  0.0f) },
+    Vertex { glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(1.0f,  0.0f), -glm::vec3(1.0f,  0.0f,  0.0f) },
+    Vertex { glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(1.0f,  1.0f), -glm::vec3(1.0f,  0.0f,  0.0f) },
+    Vertex { glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f,  1.0f), -glm::vec3(1.0f,  0.0f,  0.0f) },
 
-    -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
-     0.5f,  0.5f, -0.5f,  1.0f,  1.0f,  0.0f,  1.0f,  0.0f,
-    -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+    Vertex { glm::vec3(-0.5f,  0.5f,  0.5f),  glm::vec2(0.0f,  0.0f),  glm::vec3(0.0f,  1.0f,  0.0f) },
+    Vertex { glm::vec3( 0.5f,  0.5f,  0.5f),  glm::vec2(1.0f,  0.0f),  glm::vec3(0.0f,  1.0f,  0.0f) },
+    Vertex { glm::vec3( 0.5f,  0.5f, -0.5f),  glm::vec2(1.0f,  1.0f),  glm::vec3(0.0f,  1.0f,  0.0f) },
+    Vertex { glm::vec3(-0.5f,  0.5f, -0.5f),  glm::vec2(0.0f,  1.0f),  glm::vec3(0.0f,  1.0f,  0.0f) },
 
-    -0.5f, -0.5f, -0.5f,  0.0f,  0.0f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, -1.0f,  0.0f,
-     0.5f, -0.5f,  0.5f,  1.0f,  1.0f,  0.0f, -1.0f,  0.0f,
-    -0.5f, -0.5f,  0.5f,  0.0f,  1.0f,  0.0f, -1.0f,  0.0f
+    Vertex { glm::vec3(-0.5f, -0.5f, -0.5f),  glm::vec2(0.0f,  0.0f),  glm::vec3(0.0f, -1.0f,  0.0f) },
+    Vertex { glm::vec3( 0.5f, -0.5f, -0.5f),  glm::vec2(1.0f,  0.0f),  glm::vec3(0.0f, -1.0f,  0.0f) },
+    Vertex { glm::vec3( 0.5f, -0.5f,  0.5f),  glm::vec2(1.0f,  1.0f),  glm::vec3(0.0f, -1.0f,  0.0f) },
+    Vertex { glm::vec3(-0.5f, -0.5f,  0.5f),  glm::vec2(0.0f,  1.0f),  glm::vec3(0.0f, -1.0f,  0.0f) }
 };
 
-unsigned int cube_indicies[36] = {
+std::vector<unsigned int> cube_indicies {
     0, 1, 2,
     2, 3, 0,
 

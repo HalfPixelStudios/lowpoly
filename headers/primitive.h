@@ -4,10 +4,13 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/constants.hpp"
 #include <cstdio>
+#include <vector>
+
+#include "renderobjects.h"
 
 /* contains some primitive meshes */
-extern float cube_verticies[192];
-extern unsigned int cube_indicies[36];
+extern std::vector<Vertex> cube_verticies;
+extern std::vector<unsigned int> cube_indicies;
 
 int generateUVSphere(int slice_count, int stack_count, int* n_vertices, int* n_indices, float** vertices, unsigned int** indices);
 
