@@ -91,6 +91,9 @@ main()
     Texture container_diffuseMap("assets/textures/container_diffuse.png", TextureType_Diffuse);
     Texture container_specularMap("assets/textures/container_specular.png", TextureType_Specular);
 
+    /* models */
+    Model monkey_model("assets/models/monkey.obj");
+
     Renderer renderer;
     bool show_demo_window = true;
 
