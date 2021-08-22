@@ -16,7 +16,7 @@ Renderer::~Renderer(void)
 }
 
 void
-Renderer::draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader, unsigned int vertex_count) const
+Renderer::draw(const VertexArrayObject& vao, const IndexBuffer& ib, Shader& shader, unsigned int vertex_count) const
 {
     shader.bind();
     vao.bind();
@@ -26,7 +26,7 @@ Renderer::draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader, unsigned
 }
 
 void
-Renderer::drawMesh(Mesh& mesh, Shader& shader)
+Renderer::drawMesh(const Mesh& mesh, Shader& shader)
 {
     draw(mesh.getVAO(), mesh.getIB(), shader, mesh.getIndicesSize());
 }

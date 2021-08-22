@@ -13,7 +13,7 @@
 
 class Model
 {
-private:
+public:
     std::vector<Mesh> meshes;
 public:
     Model(std::string model_path);

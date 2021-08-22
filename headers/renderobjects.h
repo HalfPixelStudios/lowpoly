@@ -34,8 +34,8 @@ public:
     ~VertexArrayObject(void);
     template<typename T> void addAttribute(int count);
     void bindToVertexBuffer(VertexBuffer& vb);
-    void bind(void);
-    void unbind(void);
+    void bind(void) const;
+    void unbind(void) const;
 };
 
 class VertexBuffer
@@ -52,7 +52,7 @@ public:
 
 class IndexBuffer
 {
-private:
+public:
     unsigned int renderer_id;
 public:
     IndexBuffer(unsigned int* indicies, int count, GLenum usage_mode);

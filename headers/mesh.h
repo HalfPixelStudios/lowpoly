@@ -11,18 +11,16 @@
 class Mesh
 {
 private:
-    std::vector<Vertex> vertices;
-    std::vector<Texture> textures;
-    std::vector<unsigned int> indices;
     VertexArrayObject vao;
     VertexBuffer vb;
     IndexBuffer ib;
+    unsigned int index_size;
 public:
     Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices);
     ~Mesh(void);
-    inline VertexArrayObject& getVAO(void) { return vao; }
-    inline IndexBuffer& getIB(void) { return ib; }
-    inline unsigned int getIndicesSize(void) const { return indices.size(); }
+    inline const VertexArrayObject& getVAO(void) const { return vao; }
+    inline const IndexBuffer& getIB(void) const { return ib; }
+    inline unsigned int getIndicesSize(void) const { return index_size; }
 };
 
 

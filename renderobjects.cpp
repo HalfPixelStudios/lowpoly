@@ -47,13 +47,13 @@ VertexArrayObject::bindToVertexBuffer(VertexBuffer& vb)
 }
 
 void
-VertexArrayObject::bind(void)
+VertexArrayObject::bind(void) const
 {
     glCall(glBindVertexArray(renderer_id));
 }
 
 void
-VertexArrayObject::unbind(void)
+VertexArrayObject::unbind(void) const
 {
     glCall(glBindVertexArray(0));
 }

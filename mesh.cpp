@@ -2,7 +2,8 @@
 #include "headers/mesh.h"
 
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices)
-    : vertices(vertices), textures(textures), indices(indices), vao(), vb(vertices, GL_STATIC_DRAW), ib(indices, GL_STATIC_DRAW)
+    :  vao(), vb(vertices, GL_STATIC_DRAW), ib(indices, GL_STATIC_DRAW),
+       index_size(indices.size())
 {
     vb.bind();
     
