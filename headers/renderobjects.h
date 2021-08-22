@@ -2,9 +2,9 @@
 #ifndef __RENDEROBJECTS_H__
 #define __RENDEROBJECTS_H__
 
+#include "glm/glm.hpp"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "glm/glm.hpp"
 #include <vector>
 
 #include "glutils.h"

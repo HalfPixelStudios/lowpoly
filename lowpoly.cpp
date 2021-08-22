@@ -18,6 +18,7 @@
 #include "headers/primitive.h"
 #include "headers/camera.h"
 #include "headers/light.h"
+#include "headers/model.h"
 
 int
 main()
@@ -78,30 +79,6 @@ main()
     cube_vao.unbind();
     cube_vb.unbind();
     cube_ib.unbind();
-
-    /* int sphere_vertex_count; */
-    /* int sphere_index_count; */
-    /* float* sphere_vertices; */
-    /* unsigned int* sphere_indices; // free these after */
-    /* int sphere_triangle_count = generateUVSphere(10, 10, &sphere_vertex_count, &sphere_index_count, &sphere_vertices, &sphere_indices); */
-    /* printf("%i, %i, %i\n", sphere_vertex_count, sphere_index_count, sphere_triangle_count); */
-
-    /* for (int i = 0; i < sphere_vertex_count; i++) { */
-    /*     printf("[%i] %f,%f,%f\n", i, sphere_vertices[i*3], sphere_vertices[i*3+1], sphere_vertices[i*3+2]); */
-    /* } */
-
-    /* VertexArrayObject sphere_vao; */
-    /* VertexBuffer sphere_vb(sphere_vertices, sphere_vertex_count*3, GL_STATIC_DRAW); */
-    /* sphere_vb.bind(); */
-
-    /* sphere_vao.addAttribute<float>(3); */
-    /* sphere_vao.bindToVertexBuffer(sphere_vb); */
-
-    /* IndexBuffer sphere_ib(sphere_indices, sphere_index_count, GL_STATIC_DRAW); */
-
-    /* sphere_vao.unbind(); */
-    /* sphere_vb.unbind(); */
-    /* sphere_ib.unbind(); */
 
     /* shaders */
     Shader default_shader("assets/shaders/defaultVertex.shader", "assets/shaders/defaultFragment.shader");
@@ -183,17 +160,8 @@ main()
         for (int i = 0; i < sizeof(crate_positions)/sizeof(glm::vec3); i++) {
             model = glm::translate(glm::mat4(1.0), crate_positions[i]);
             default_shader.setUniformMat4f("u_MVP.model", model);
-            renderer.draw(cube_vao, cube_ib, default_shader, 12);
+            renderer.draw(cube_vao, cube_ib, default_shader, cube_indicies.size());
         }
-
-        /* unlit_shader.bind(); */
-        /* unlit_shader.setUniform3f("u_ModelColor", glm::vec3(1.0f, 1.0f, 1.0f)); */
-
-        /* unlit_shader.setUniformMat4f("u_MVP.view", view); */
-        /* unlit_shader.setUniformMat4f("u_MVP.projection", projection); */
-        /* unlit_shader.setUniformMat4f("u_MVP.model", glm::scale(glm::mat4(1.0), glm::vec3(3.0f, 3.0f, 3.0f))); */
-
-        /* renderer.draw(sphere_vao, sphere_ib, unlit_shader, sphere_triangle_count); */
 
         /* render imgui */
         ImGui::Render();
