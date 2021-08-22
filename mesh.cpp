@@ -4,7 +4,7 @@
 Mesh::Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices)
     : vertices(vertices), textures(textures), indices(indices), vao(), vb(vertices, GL_STATIC_DRAW), ib(indices, GL_STATIC_DRAW)
 {
-    vao.bind();
+    vb.bind();
     
     vao.addAttribute<float>(3); // position (x,y,z)
     vao.addAttribute<float>(2); // texture  (u,v)

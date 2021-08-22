@@ -64,21 +64,7 @@ main()
     ImGui::StyleColorsDark();
 
     /* setup objects */
-    VertexArrayObject cube_vao;
-    /* VertexBuffer cube_vb(cube_verticies, sizeof(cube_verticies)/sizeof(cube_verticies[0]), GL_STATIC_DRAW); */
-    VertexBuffer cube_vb(cube_verticies, GL_STATIC_DRAW);
-    cube_vb.bind();
-
-    cube_vao.addAttribute<float>(3);
-    cube_vao.addAttribute<float>(2);
-    cube_vao.addAttribute<float>(3);
-    cube_vao.bindToVertexBuffer(cube_vb);
-
-    IndexBuffer cube_ib(cube_indicies, GL_STATIC_DRAW);
-
-    cube_vao.unbind();
-    cube_vb.unbind();
-    cube_ib.unbind();
+    Mesh cube_mesh(cube_verticies, std::vector<Texture>(), cube_indicies);
 
     /* shaders */
     Shader default_shader("assets/shaders/defaultVertex.shader", "assets/shaders/defaultFragment.shader");
@@ -163,7 +149,7 @@ main()
         for (int i = 0; i < sizeof(crate_positions)/sizeof(glm::vec3); i++) {
             model = glm::translate(glm::mat4(1.0), crate_positions[i]);
             default_shader.setUniformMat4f("u_MVP.model", model);
-            renderer.draw(cube_vao, cube_ib, default_shader, cube_indicies.size());
+            renderer.drawMesh(cube_mesh, default_shader);
         }
 
         /* render imgui */

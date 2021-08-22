@@ -5,6 +5,8 @@
 #include "headers/glutils.h"
 #include "headers/shaderutils.h"
 
+#include <iostream>
+
 Renderer::Renderer(void)
 {
 }
@@ -21,6 +23,12 @@ Renderer::draw(VertexArrayObject& vao, IndexBuffer& ib, Shader& shader, unsigned
     ib.bind();
 
     glCall(glDrawElements(GL_TRIANGLES, vertex_count, GL_UNSIGNED_INT, nullptr));
+}
+
+void
+Renderer::drawMesh(Mesh& mesh, Shader& shader)
+{
+    draw(mesh.getVAO(), mesh.getIB(), shader, mesh.getIndicesSize());
 }
 
 void

@@ -20,6 +20,9 @@ private:
 public:
     Mesh(std::vector<Vertex> vertices, std::vector<Texture> textures, std::vector<unsigned int> indices);
     ~Mesh(void);
+    inline VertexArrayObject& getVAO(void) { return vao; }
+    inline IndexBuffer& getIB(void) { return ib; }
+    inline unsigned int getIndicesSize(void) const { return indices.size(); }
 };
 
 

@@ -20,7 +20,7 @@ struct Vertex {
 struct VertexAttrib {
     GLenum type;
     int count;
-    GLenum normalized;
+GLenum normalized;
 };
 
 class VertexArrayObject
