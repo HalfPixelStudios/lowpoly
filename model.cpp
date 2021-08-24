@@ -18,6 +18,8 @@ Model::Model(std::string model_path)
 
 Model::~Model(void)
 {
+    for (int i = 0; i < meshes.size(); i++)
+        delete meshes[i];
 }
 
 void
@@ -35,7 +37,7 @@ Model::load_node(const aiScene* scene, aiNode* node)
     }
 }
 
-Mesh
+Mesh*
 Model::convert_mesh(aiMesh* mesh)
 {
     /* process vertices */
@@ -65,5 +67,5 @@ Model::convert_mesh(aiMesh* mesh)
             indices.push_back(face.mIndices[j]);
     }
 
-    return Mesh(vertices, textures, indices);
+    return new Mesh(vertices, textures, indices);
 }

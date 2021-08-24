@@ -14,13 +14,13 @@
 class Model
 {
 public:
-    std::vector<Mesh> meshes;
+    std::vector<Mesh*> meshes;
 public:
     Model(std::string model_path);
     ~Model(void);
 private:
     void load_node(const aiScene* scene, aiNode* node);
-    Mesh convert_mesh(aiMesh* mesh);
+    Mesh* convert_mesh(aiMesh* mesh);
 };
 
 

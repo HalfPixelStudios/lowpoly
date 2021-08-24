@@ -151,10 +151,10 @@ main()
             default_shader.setUniformMat4f("u_MVP.model", model);
             renderer.drawMesh(cube_mesh, default_shader);
         }
-        model = glm::mat4(1.0f);
+        model = glm::translate(glm::mat4(1.0f), glm::vec3(5.0f, 0.0f, 0.0f));
         default_shader.setUniformMat4f("u_MVP.model", model);
         for (int i = 0; i < monkey_model.meshes.size(); i++) {
-            renderer.drawMesh(monkey_model.meshes[i], default_shader);
+            renderer.drawMesh(*monkey_model.meshes[i], default_shader);
         }
 
         /* render imgui */
