@@ -22,7 +22,8 @@ mediump vec3 calculateSpecularLight(mediump vec3 viewRay, mediump vec3 reflected
 mediump float calculateAttenuationValue(mediump vec3 lightPosition, mediump float attenuationLinear, mediump float attenuationQuadratic);
 
 void
-main() {
+main()
+{
     mediump vec3 outputColor = vec3(0.0);
 
     outputColor += u_Material.ambient;

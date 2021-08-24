@@ -68,7 +68,7 @@ main()
 
     /* shaders */
     Shader default_shader("assets/shaders/defaultVertex.shader", "assets/shaders/defaultFragment.shader");
-    /* Shader textured_shader("assets/shaders/texturedVertex.shader", "assets/shaders/texturedFragment.shader"); */
+    Shader depth_shader("assets/shaders/depthVertex.shader", "assets/shaders/depthFragment.shader");
     Shader unlit_shader("assets/shaders/unlitVertex.shader", "assets/shaders/unlitFragment.shader");
 
     // TODO: check invalid location
@@ -106,55 +106,62 @@ main()
         /* ImGui::ShowDemoWindow(&show_demo_window); */
     
         /* mvp */
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)4/3, 0.1f, 100.0f); 
+        const float near_culling = 1.0f;
+        const float far_culling = 50.0f;
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)4/3, near_culling, far_culling); 
         glm::mat4 view = main_cam.getViewMatrix();
 
         /* setup draw call */
-        default_shader.bind();
-        default_shader.setUniform3f("u_Material.ambient", main_light.getColor() * 0.1f);
-        container_diffuseMap.bind(1);
-        default_shader.setUniform1i("u_Material.diffuse", 1);
-        container_specularMap.bind(0);
-        default_shader.setUniform1i("u_Material.specular", 0);
+        /* default_shader.bind(); */
+        /* default_shader.setUniform3f("u_Material.ambient", main_light.getColor() * 0.1f); */
+        /* container_diffuseMap.bind(1); */
+        /* default_shader.setUniform1i("u_Material.diffuse", 1); */
+        /* container_specularMap.bind(0); */
+        /* default_shader.setUniform1i("u_Material.specular", 0); */
 
-        default_shader.setUniform3f("u_ViewerPosition", main_cam.getPosition());
+        /* default_shader.setUniform3f("u_ViewerPosition", main_cam.getPosition()); */
 
-        default_shader.setUniform3f("u_DirectionalLights[0].direction", main_light.getPosition());
-        default_shader.setUniform3f("u_DirectionalLights[0].color", main_light.getColor());
-        default_shader.setUniform1f("u_DirectionalLights[0].specularStrength", 4.0);
-        default_shader.setUniform1f("u_DirectionalLights[0].specularShininess", 2.0);
+        /* default_shader.setUniform3f("u_DirectionalLights[0].direction", main_light.getPosition()); */
+        /* default_shader.setUniform3f("u_DirectionalLights[0].color", main_light.getColor()); */
+        /* default_shader.setUniform1f("u_DirectionalLights[0].specularStrength", 4.0); */
+        /* default_shader.setUniform1f("u_DirectionalLights[0].specularShininess", 2.0); */
 
-        default_shader.setUniform3f("u_PointLights[0].position", glm::vec3(0.0f, 0.0f, 0.0f));
-        default_shader.setUniform3f("u_PointLights[0].color", glm::vec3(0.0f, 0.0f, 1.0f));
-        default_shader.setUniform1f("u_PointLights[0].specularStrength", 4.0);
-        default_shader.setUniform1f("u_PointLights[0].specularShininess", 2.0);
-        default_shader.setUniform1f("u_PointLights[0].attenuationLinear", 0.045f);
-        default_shader.setUniform1f("u_PointLights[0].attenuationQuadratic", 0.0075f);
+        /* default_shader.setUniform3f("u_PointLights[0].position", glm::vec3(0.0f, 0.0f, 0.0f)); */
+        /* default_shader.setUniform3f("u_PointLights[0].color", glm::vec3(0.0f, 0.0f, 1.0f)); */
+        /* default_shader.setUniform1f("u_PointLights[0].specularStrength", 4.0); */
+        /* default_shader.setUniform1f("u_PointLights[0].specularShininess", 2.0); */
+        /* default_shader.setUniform1f("u_PointLights[0].attenuationLinear", 0.045f); */
+        /* default_shader.setUniform1f("u_PointLights[0].attenuationQuadratic", 0.0075f); */
 
-        default_shader.setUniform3f("u_SpotLights[0].position", main_cam.getPosition());
-        default_shader.setUniform3f("u_SpotLights[0].direction", main_cam.getForwardVector());
-        default_shader.setUniform3f("u_SpotLights[0].color", glm::vec3(0.0f, 1.0f, 0.0f));
-        default_shader.setUniform1f("u_SpotLights[0].specularStrength", 4.0);
-        default_shader.setUniform1f("u_SpotLights[0].specularShininess", 2.0);
-        default_shader.setUniform1f("u_SpotLights[0].attenuationLinear", 0.045f);
-        default_shader.setUniform1f("u_SpotLights[0].attenuationQuadratic", 0.0075f);
-        default_shader.setUniform1f("u_SpotLights[0].innerCutoff", glm::cos(glm::radians(12.0f)));
-        default_shader.setUniform1f("u_SpotLights[0].outerCutoff", glm::cos(glm::radians(14.0f)));
+        /* default_shader.setUniform3f("u_SpotLights[0].position", main_cam.getPosition()); */
+        /* default_shader.setUniform3f("u_SpotLights[0].direction", main_cam.getForwardVector()); */
+        /* default_shader.setUniform3f("u_SpotLights[0].color", glm::vec3(0.0f, 1.0f, 0.0f)); */
+        /* default_shader.setUniform1f("u_SpotLights[0].specularStrength", 4.0); */
+        /* default_shader.setUniform1f("u_SpotLights[0].specularShininess", 2.0); */
+        /* default_shader.setUniform1f("u_SpotLights[0].attenuationLinear", 0.045f); */
+        /* default_shader.setUniform1f("u_SpotLights[0].attenuationQuadratic", 0.0075f); */
+        /* default_shader.setUniform1f("u_SpotLights[0].innerCutoff", glm::cos(glm::radians(12.0f))); */
+        /* default_shader.setUniform1f("u_SpotLights[0].outerCutoff", glm::cos(glm::radians(14.0f))); */
 
-        /* model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 0.0f)); */
-        default_shader.setUniformMat4f("u_MVP.view", view);
-        default_shader.setUniformMat4f("u_MVP.projection", projection);
+        /* default_shader.setUniformMat4f("u_MVP.view", view); */
+        /* default_shader.setUniformMat4f("u_MVP.projection", projection); */
 
-        glm::mat4 model;
+        /* glm::mat4 model; */
+        /* for (int i = 0; i < sizeof(crate_positions)/sizeof(glm::vec3); i++) { */
+        /*     model = glm::translate(glm::mat4(1.0), crate_positions[i]); */
+        /*     default_shader.setUniformMat4f("u_MVP.model", model); */
+        /*     renderer.drawMesh(cube_mesh, default_shader); */
+        /* } */
+
+        depth_shader.bind();
+        depth_shader.setUniform1f("u_NearCulling", near_culling);
+        depth_shader.setUniform1f("u_FarCulling", far_culling);
+
+        depth_shader.setUniformMat4f("u_MVP.view", view);
+        depth_shader.setUniformMat4f("u_MVP.projection", projection);
         for (int i = 0; i < sizeof(crate_positions)/sizeof(glm::vec3); i++) {
-            model = glm::translate(glm::mat4(1.0), crate_positions[i]);
-            default_shader.setUniformMat4f("u_MVP.model", model);
-            renderer.drawMesh(cube_mesh, default_shader);
-        }
-        model = glm::translate(glm::mat4(1.0f), glm::vec3(5.0f, 0.0f, 0.0f));
-        default_shader.setUniformMat4f("u_MVP.model", model);
-        for (int i = 0; i < monkey_model.meshes.size(); i++) {
-            renderer.drawMesh(*monkey_model.meshes[i], default_shader);
+            depth_shader.setUniformMat4f("u_MVP.model", glm::translate(glm::mat4(1.0), crate_positions[i]));
+            renderer.drawMesh(cube_mesh, depth_shader);
         }
 
         /* render imgui */
