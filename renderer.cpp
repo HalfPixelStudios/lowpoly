@@ -34,6 +34,6 @@ Renderer::drawMesh(const Mesh& mesh, Shader& shader)
 void
 Renderer::clear(void) const
 {
-    glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
+    glCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT));
 }
 

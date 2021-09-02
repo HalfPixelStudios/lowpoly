@@ -12,7 +12,8 @@ out mediump vec3 v_FragPosition;
 uniform MVP u_MVP;
 
 void
-main() {
+main()
+{
     gl_Position = u_MVP.projection * u_MVP.view * u_MVP.model * vec4(pos, 1.0);
     v_TexCoord = tex_coord;
     v_Normal = vec3(u_MVP.model * vec4(normal, 0.0));
